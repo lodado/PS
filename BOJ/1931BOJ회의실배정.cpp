@@ -23,7 +23,7 @@ int main() {
 	
 	int head=0,result=0;
 	
-	for(unsigned int i=0; i<v.size(); i++)
+	for(unsigned int i=0; i<v.size(); ++i)
 	{
 		int end  = v[i].first;
 		int start= v[i].second;
