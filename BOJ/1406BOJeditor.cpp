@@ -32,14 +32,16 @@ class linkedList : public Node
 			back->tail=front;
 			iter=back;
 		}
+		// init
 	
 		void push_back(char data)
 		{
 			Node* newNode = new Node(data);
-			
-			if((front->head)==(back))
+			newNode->head=back;
+
+			if((front->head)==(back))	
 			{
-				newNode->head=back;
+				
 				newNode->tail=front;
 				back->tail=newNode;
 				front->head=newNode;
@@ -48,13 +50,14 @@ class linkedList : public Node
 			}
 			else
 			{
-				newNode->head=back;
 				newNode->tail=back->tail;
 				back->tail->head=newNode;
 				back->tail=newNode;
 				//printf("push %c..\n",data);
 			}
 		}
+		//I should have been changed or removed front but i am lazy zz..
+		//push data(char) between front and back
 		
 		void check()
 		{
@@ -64,43 +67,43 @@ class linkedList : public Node
 				printf("%c",current->data);
 				current=current->head;
 			}
-			//printf("          cursor : %c  \n",iter->data);
+			//printf(" cursor : %c  \n",iter->data);
 		}
+		// print data
 		
 		void L()
 		{
 			if(iter!=front && iter->tail!=front)	iter=iter->tail;
 		}
+		// move cursor to left
+		
 		
 		void D()
 		{
 			if(iter!=back)	iter=iter->head;
 		}
-		
+		//move cursor to right
+
 		void B()
 		{
 			if(iter!=front && iter->tail!=front)
 			{
+				Node* delNode =iter->tail;
+				
 				if(iter!=back)
 				{
-					Node* delNode =iter->tail;
-				
 					delNode->tail->head=iter;
 					iter->tail=delNode->tail;
-				
-					delete delNode;
 				}
 				else
-				{
-					Node* delNode=iter->tail;
-					
+				{	
 					delNode->tail->head=back;
 					back->tail=delNode->tail;
-					
-					delete delNode;
 				}
+					delete delNode;
 			}
 		}
+		// delete 
 		
 		void P(char data)
 		{
@@ -111,16 +114,16 @@ class linkedList : public Node
 			else
 			{
 				Node* newNode = new Node(data);
+			
+				newNode->head=iter;
+				newNode->tail=iter->tail;
 				
-				Node* iterator = iter;
-				newNode->head=iterator;
-				newNode->tail=iterator->tail;
-				
-				iterator->tail->head=newNode;
-				iterator->tail=newNode;
+				iter->tail->head=newNode;
+				iter->tail=newNode;
 				
 			}
 		}
+		//push 
 };
 
 
