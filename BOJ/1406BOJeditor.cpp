@@ -62,11 +62,17 @@ class linkedList : public Node
 		void check()
 		{
 			Node* current=front->head;
+			Node* forFree=current;
 			while(current!=back)
 			{
 				printf("%c",current->data);
 				current=current->head;
+				free(forFree);
+				forFree=current;
 			}
+			
+			free(front);
+			free(back);
 			//printf(" cursor : %c  \n",iter->data);
 		}
 		// print data
