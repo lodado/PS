@@ -1,29 +1,33 @@
 import heapq
+maxQ = []
+minQ = []
 
+def insert(num):
+    global maxQ, minQ
+    heapq.heappush(maxQ, -num)
+    heapq.heappush(minQ, num)
+
+def pop(num):
+    global maxQ, minQ
+    if not(maxQ and minQ):
+        return
+    
+    if(num==-1):
+        maxQ.remove(-heapq.heappop(minQ))
+    else:
+        minQ.remove(-heapq.heappop(maxQ))
+    
 def solution(operations):
-    answer = []
+    global maxQ, minQ
     
-    maxQ = []
-    minQ = []
+    for op in operations:
+        command, num = op.split()
+        num = int(num)
+        
+        if(command=="I"):
+            insert(num)
+        else:
+            pop(num)
     
-    for i in operations:
-        
-        pars = i.split(' ')
-        
-        if(pars[0]=='I'):
-            heapq.heappush(maxQ, -int(pars[1]))
-            heapq.heappush(minQ, int(pars[1]))
-        
-        if(pars[0]=="D"):
-            
-            if(len(maxQ)<=0 or len(minQ)<=0):
-                continue
-            
-            if(pars[1]=='1'):
-                now = -heapq.heappop(maxQ)
-                minQ.remove(now)
-            else:
-                now = -heapq.heappop(minQ)
-                maxQ.remove(now)
-    
-    return [-maxQ[0] if maxQ else 0, minQ[0] if minQ else 0]
+    answer = [0, 0] if not(maxQ and minQ) else [-maxQ[0], minQ[0]]
+    return answer
