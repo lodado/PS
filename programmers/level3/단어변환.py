@@ -1,31 +1,28 @@
-from collections import deque
+import re
 import copy
+from collections import deque
 
-def solution(begin, target, words):
-    
-    deq = deque()
-    deq.append((begin, 0))
-    
-    alphabet =sorted("qwertyuiopasdfghjklzxcvbnm")
-    
-    newwords = copy.deepcopy(words)
-    
-    while(len(deq)>0):
-        
-        current, index = deq.popleft()
-        #print(current, index)
+def solution(begin, target, wordsParam):
 
-        if(current==target):
-            return index
-        if(index>=len(words)):
-            continue
+    words = copy.deepcopy(wordsParam)
+    deq = deque([[begin, 0]])
+    
+    while(deq):
+        word, count = deq.popleft()
         
-        for string in range(len(current)):
+        if(word==target):
+            return count
+        
+        for index in range(0, len(word)):
+            startWord = word[:index]
+            endWord = word[index+1:]
+            saveArr = []
             
-            for alpha in alphabet:
-                newstr = current[:string]+alpha+current[string+1:]
-                for aa in newwords:
-                    if newstr == aa:
-                        newwords.remove(newstr)
-                        deq.append((newstr,index+1))
+            for otherWord in words:
+                if(otherWord!=word):
+                    if(re.match('{}\w{}'.format(startWord,endWord), otherWord)):
+                        deq.append([otherWord, count+1])
+                    else:
+                        saveArr.append(otherWord)
+            words = saveArr
     return 0
