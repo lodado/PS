@@ -9,7 +9,7 @@ def solution(files):
     answer = []
     
     for file in files:
-        num = re.search('([^0-9]+)(\d+)(.+)', file)
+        num = re.search('([^0-9]+)(\d+)(.+)?', file)
         lists.append(num.groups())
     lists.sort(key=sort)
     
