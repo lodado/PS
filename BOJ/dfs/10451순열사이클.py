@@ -1,38 +1,37 @@
 from sys import stdin, setrecursionlimit
-setrecursionlimit(10**6)
+from collections import Counter
+setrecursionlimit(10**9)
 
 def scan():
-	return stdin.readline()
+	return list(map(int, stdin.readline().split()))
 	
-def scanList():
-	return list(map(int, scan().split()))
-
+T = int(input())
 ans = 0
 
-def dfs(findNumber, index, arr):
+def dfs(arr, visited, startNumber, number):
 	global ans
 	
-	if(arr[index][2]):
-		return
-	
-	nowValue = arr[index][1]
-	
-	if(nowValue == findNumber):
+	if(startNumber == number):
+		visited[number] = True
 		ans+=1
 		return
+	nextNumber = arr[number]
 	
-	arr[index][2] = True
+	if not(visited[i]):
+		dfs(arr, visited, startNumber, nextNumber)
 	
-	dfs(findNumber, nowValue, arr)	
+	visited[number]=True
 		
-		
-for _ in range(int(scan())):
-	N = int(scan())
-	arr = [[0,0,True]] + [[index+1, value, False] for index, value in enumerate(scanList())]
+for _ in range(T):
+	N = int(input())
+	ans = 0
+	visited = [False for i in range(N+1)]
+	visited[0] = True
 	
-	for index, value, check in arr:
-		if not check:
-			dfs(index, index, arr)
+	arr = [0] + scan()
 	
+	for i in range(1, len(arr)):
+		if not(visited[i]):
+			dfs(arr, visited, i, arr[i])
+			
 	print(ans)
-	ans =0
