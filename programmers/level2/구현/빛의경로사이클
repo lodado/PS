@@ -1,0 +1,49 @@
+from sys import setrecursionlimit
+setrecursionlimit(10**6)
+
+# 동 남 서 북
+dx = [1,0,-1,0]
+dy = [0,1,0,-1]
+
+def dfs(grid, x, y, direct, length):
+    global dx, dy, direction, col, row
+    
+    if(direction[y][x][direct]==True):
+        return length
+    else:
+        direction[y][x][direct] = True
+        newX = (x + dx[direct]) % row
+        newY = (y + dy[direct]) % col
+        
+        if(newX<0):
+            newX = row-1
+        if(newY<0):
+            newY = col-1
+            
+        if(grid[newY][newX]=='L'):
+            direct=(direct-1)
+            if(direct<0):
+                direct=3
+                
+        if(grid[newY][newX]=='R'):
+                direct=(direct+1)%4
+                
+        return dfs(grid, newX, newY, direct, length+1)
+
+
+def solution(grid):
+    global dx, dy, direction, col, row
+    answer = []
+    col = len(grid)
+    row = len(grid[0])
+    
+    direction = [[[False for i in range(4)] for i in range(row)] for j in range(col)]
+
+    for y in range(col):
+        for x in range(row):
+            for i in range(4):
+                if(direction[y][x][i]==False):
+                    length = dfs(grid, x, y, i, 0)
+                    if(length>0):
+                        answer.append(length)
+    return sorted(answer)
