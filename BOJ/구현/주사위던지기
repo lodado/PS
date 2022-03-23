@@ -1,0 +1,63 @@
+from sys import stdin
+
+def scan():
+	return list(map(int, stdin.readline().split()))
+
+[col, row, y, x, k] = scan()
+
+arr = [scan() for i in range(col)]
+
+# 동 1 서 2 북 3 남 4
+mv =scan()
+dx = [0,1,-1,0,0]
+dy = [0,0,0,-1,1]
+
+dice = [0,0,0,0,0,0,0]
+
+def moveCommand(x, y, direction):
+	global dice, col, row, arr, dx, dy
+	
+	newX = x + dx[direction]
+	newY = y + dy[direction]
+	
+	if not(0<=newX<row and 0<=newY<col):
+		return [x, y]
+	
+	_, d1, d2, d3, d4, d5, d6 = dice
+	
+	if(direction==1):
+		dice[1] = d4
+		dice[3] = d1
+		dice[4] = d6
+		dice[6] = d3
+	elif(direction==2):
+		for i in range(3):
+			_, d1, d2, d3, d4, d5, d6 = dice
+			dice[1] = d4
+			dice[3] = d1
+			dice[4] = d6
+			dice[6] = d3
+	elif(direction==3):
+		for i in range(3):
+			_, d1, d2, d3, d4, d5, d6 = dice
+			dice[1] = d2
+			dice[2] = d6
+			dice[5] = d1
+			dice[6] = d5
+	else:
+		dice[1] = d2
+		dice[2] = d6
+		dice[5] = d1
+		dice[6] = d5
+	
+	if(arr[newY][newX]==0):
+		arr[newY][newX] = dice[6]
+	else:
+		dice[6] = arr[newY][newX]
+		arr[newY][newX] = 0
+	
+	print(dice[1])
+	return [newX, newY]
+		
+for direction in mv:
+	[x, y] = moveCommand(x, y, direction)
