@@ -1,0 +1,37 @@
+from sys import stdin
+
+# 동 0 북 1 서 2 남 3
+dx = [1, 0, -1, 0]
+dy = [0, -1, 0, 1]
+
+def scan():
+	return list(map(int, stdin.readline().split()))
+	
+N = int(input())
+ans = 0
+
+locate = [[0 for i in range(101)] for j in range(101)]
+
+for _ in range(N):
+	x, y, direct, generation = scan()
+	locate[y][x] = 1
+	
+	startDirect = [direct]
+	for i in range(generation):
+		newArr = []
+		for j in startDirect[::-1]:
+			newArr.append((j+1)%4)
+		startDirect+=newArr
+	
+	for i in startDirect:
+		x+= dx[i]
+		y+= dy[i]
+		locate[y][x] = 1
+
+for y in range(100):
+	for x in range(100):
+		if(locate[y][x]==1 and locate[y][x+1]==1):
+			if(locate[y+1][x]==1 and locate[y+1][x+1]==1):
+				ans+=1
+		
+print(ans)
