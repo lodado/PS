@@ -1,0 +1,15 @@
+class Solution:
+    
+    def dfs(self, nums, arr, index):
+        
+        ans.append(arr[:])
+        for ind in range(index, len(nums)):
+                arr.append(nums[ind])
+                self.dfs(nums, arr, ind+1)
+                arr.pop()
+        
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        global ans 
+        ans = []
+        self.dfs(nums, [], 0)
+        return ans
