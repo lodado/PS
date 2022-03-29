@@ -1,0 +1,13 @@
+string = input().rstrip()
+bomb = input().rstrip()
+
+st = []
+for ind, val in enumerate(string):
+	st.append(val)	
+	if(val==bomb[-1]):
+		if(st and ''.join(st[-len(bomb):])==bomb):
+			for i in range(len(bomb)):
+				st.pop()	
+			
+ans = ''.join(st)
+print(ans if ans else "FRULA")
