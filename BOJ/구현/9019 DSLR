@@ -1,0 +1,40 @@
+N = int(input())
+
+def DCommand(number):
+	return (number*2) % 10000
+	
+def SCommand(number):
+	return number - 1 if number!=0 else 9999
+
+def LCommand(number):
+	return (number*10 + number//1000) % 10000
+	
+def RCommand(number):	
+	return ((number//10) + (number%10) * 1000) %10000
+	
+def bfs(start, end):
+	deq = deque([[start, '']])
+	sets = set()
+	
+	while(deq):
+		number, string = deq.popleft()
+		if(number==end):
+			return string
+		D,S,L,R = DCommand(number), SCommand(number), LCommand(number), RCommand(number)
+		if(D not in sets):
+			deq.append([D, string+'D'])
+			sets.add(D)
+		if(S not in sets):
+			deq.append([S, string+'S'])
+			sets.add(S)
+		if(L not in sets):
+			deq.append([L, string+'L'])
+			sets.add(L)
+		if(R not in sets):
+			deq.append([R, string+'R'])
+			sets.add(R)
+		
+for _ in range(N):
+	start, end = map(int, stdin.readline().split())
+	ans = bfs(start, end)
+	print(ans)
