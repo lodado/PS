@@ -1,0 +1,16 @@
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        length = len(nums)
+        ans = 0
+        maxi = 0
+        currentMax = 0
+        
+        for i in range(length-1):
+            now = nums[i]
+            maxi = max(maxi, i+now)
+            
+            if(currentMax==i):
+                ans+=1
+                currentMax = maxi
+                
+        return ans
