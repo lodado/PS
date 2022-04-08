@@ -1,0 +1,105 @@
+from sys import stdin
+from collections import deque
+
+[col, row] = map(int, input().split())
+arr = [list(stdin.readline().rstrip()) for i in range(col)]
+arr.reverse()
+
+N = int(input())
+turn = list(map(int, input().split()))
+dx = [0,0,1,-1]
+dy = [1,-1,0,0]
+
+def shouldClusterMove(mvArr):
+	global col, row, arr
+	
+	for x, y in mvArr:
+		if(y==0):
+			return False
+	return True
+
+def moveCluster(mvArr):
+	global dx, dy, col, row, arr
+	
+	for x, y in mvArr:
+		arr[y][x] = '.'
+
+	while(True):
+		flag = False
+		index = 0 
+		for x, y in mvArr:
+			if(y>=1 and arr[y-1][x]=='x'):
+				flag = True
+				break
+			
+		if not flag:
+			while(index<len(mvArr)):
+				mvArr[index][1]-=1
+				if(mvArr[index][1]==0):
+					flag=True
+				index+=1
+		if(flag):
+			break
+	
+	for x, y in mvArr:
+		arr[y][x] = 'x'
+	
+def splitCluster(startX, startY, visited, cnt):
+	global dx, dy, col, row, arr
+	deq = deque([[startX, startY]])
+	visited[startY][startX] = cnt
+	que = []
+	
+	while(deq):
+		[x, y] = deq.popleft()
+		que.append([x, y])
+		
+		for i in range(4):
+			newX = x + dx[i]
+			newY = y + dy[i]
+			
+			if(0<=newX<row and 0<=newY<col and visited[newY][newX]==0 and arr[newY][newX]=='x'):
+				visited[newY][newX] = cnt
+				deq.append([newX, newY])
+	return que
+
+def findCluster():
+	global arr, col, row
+	
+	visited = [[0 for j in range(row)] for i in range(col)]
+	cnt = 1
+	container = []
+
+	for y in range(col):
+		for x in range(row):
+			if(visited[y][x]==0 and arr[y][x]=='x'):
+				container.append(splitCluster(x, y, visited, cnt))
+				cnt+=1
+	return container
+
+for ind, val in enumerate(turn):
+	val = val-1
+	if(ind%2==0):
+		for x in range(0, row):
+			if(arr[val][x]=='x'):
+				arr[val][x] = '.'
+				break
+	else:
+		for x in range(row-1, -1, -1):
+			if(arr[val][x]=='x'):
+				arr[val][x] = '.'
+				break
+			
+	clusters = findCluster()
+	for cluster in clusters:
+		if(shouldClusterMove(cluster)):
+			moveCluster(cluster)
+	
+for ind, i in enumerate(arr[::-1]):
+	for j in i:
+		if(j=='x'):
+			print('x', end='')
+		else:
+			print(j, end='')
+	if(ind<len(arr)-1):
+		print()
