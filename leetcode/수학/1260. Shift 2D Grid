@@ -1,0 +1,15 @@
+class Solution:
+    def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        m,n = len(grid), len(grid[0])
+        spreadArray = sum(grid, [])
+        arr = [[0 for i in range(n)] for j in range(m)]
+        
+        for y in range(m):
+            for x in range(n):
+                index = (y*n + x + len(spreadArray)-k) % len(spreadArray)
+                now = spreadArray[index]
+                arr[y][x] = now
+            
+        return arr
+
+ 
