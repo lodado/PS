@@ -3,8 +3,6 @@ class Solution:
         """
           Do not return anything, modify board in-place instead.
         """
-    
-        newBoard = [[0 for i in range(len(board[0]))] for j in range(len(board))]
         dx = [0,0,1,1,1,-1,-1,-1]
         dy = [1,-1,1,0,-1,1,0,-1]
         
