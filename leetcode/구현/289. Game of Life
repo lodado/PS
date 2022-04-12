@@ -1,0 +1,43 @@
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        """
+          Do not return anything, modify board in-place instead.
+        """
+    
+        newBoard = [[0 for i in range(len(board[0]))] for j in range(len(board))]
+        dx = [0,0,1,1,1,-1,-1,-1]
+        dy = [1,-1,1,0,-1,1,0,-1]
+        
+        for y in range(len(board)):
+            for x in range(len(board[0])):
+                cnt = 0
+                for i in range(8):
+                    newX = x + dx[i]
+                    newY = y + dy[i]
+                    
+                    if(0<=newX<len(board[0]) and 0<=newY<len(board) and board[newY][newX]>=1):
+                        cnt+=1
+                now = board[y][x]
+
+                if(now>=1):
+                    if(cnt<2):
+                        board[y][x] = 10
+                    elif(2<=cnt<=3):
+                        board[y][x] = 20
+                    else:
+                        board[y][x] = 30
+                else:
+                    if(cnt==3):
+                        board[y][x] = -10
+                    
+                newBoard[y][x] = cnt
+        
+        for y in range(len(board)):
+            for x in range(len(board[0])):
+                if(board[y][x]==10):
+                    board[y][x]=0
+                elif(board[y][x]==20 or board[y][x]==-10):
+                    board[y][x]=1
+                elif(board[y][x] == 30):
+                    board[y][x]=0
+         
