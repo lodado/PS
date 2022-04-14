@@ -1,0 +1,77 @@
+from sys import stdin, setrecursionlimit
+setrecursionlimit(10**6)
+
+def scan():
+	return list(map(int, stdin.readline().split()))
+
+col, row, K = scan()
+arr = [[0 for i in range(row)] for j in range(col)]
+answer = 0
+blocks = []
+
+for _ in range(K):
+	[c, r] = scan()
+	blocks.append([scan() for i in range(c)])
+
+def rotate(block):
+	return [i for i in zip(*block[::-1])]
+
+def getAnswer():
+	global arr, col, row
+	ans = 0
+	
+	for y in range(col):
+		for x in range(row):
+			if(arr[y][x]==1):
+				ans+=1
+	return ans
+
+def isVaildInsert(startX, startY, block, c, r):
+	global arr, col, row
+	
+	for y in range(c):
+		for x in range(r):
+			if(arr[startY+y][startX+x]+block[y][x]>=2):
+				return False
+	return True
+	
+def insert(startX, startY, block):
+	global arr, col, row
+	c, r = len(block), len(block[0])
+	
+	for y in range(c):
+		for x in range(r):
+			arr[startY+y][startX+x]+=block[y][x]
+
+def dfs(index=0):
+	global answer, blocks, K, arr
+	
+	if(index>=K):
+		return
+	
+	nowBlock = blocks[index]
+	isAttach = False
+	
+	for _ in range(4):
+		c, r = len(nowBlock), len(nowBlock[0])
+		for startY in range(col):
+			if(startY+c>col or isAttach):
+				break
+			
+			for startX in range(row):
+				if(startX+r>row or isAttach):
+					break
+				
+				if(isVaildInsert(startX, startY, nowBlock, c, r)):
+					insert(startX, startY, nowBlock)
+					isAttach=True
+					
+		if(isAttach):
+			break
+		nowBlock = rotate(nowBlock)
+	
+	answer = max(answer, getAnswer())
+	dfs(index+1)
+	
+dfs()
+print(answer)
