@@ -1,0 +1,50 @@
+from collections import deque
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def trimBST(self, root: Optional[TreeNode], low: int, high: int) -> Optional[TreeNode]:
+        st = [root]
+        nodes = deque([])
+        
+        while st:
+            node = st.pop()
+            left, right, val = node.left, node.right, node.val
+            
+            if(low<=val<=high):
+                nodes.append(val)
+            
+            if left:
+                st.append(left)
+            if right:
+                st.append(right)
+            
+        if not nodes:
+            return None
+        
+        head = TreeNode(nodes[0])
+        nodes.popleft()
+        
+        while nodes:
+            target = nodes.popleft()
+            cursor = head
+            
+            while cursor:
+                left, right, val = cursor.left, cursor.right, cursor.val
+                if(left and val>target):
+                    cursor = left
+                elif(right and val<target):
+                    cursor = right
+                else:
+                    break
+            
+            if(cursor.val>target):
+                cursor.left = TreeNode(target)
+            else:
+                cursor.right = TreeNode(target)
+            
+        return head
