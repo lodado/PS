@@ -1,0 +1,19 @@
+def solution(dirs):
+    answer = 0
+    row, col = len(dirs[0]), len(dirs[1])
+    path = set()
+    commands = {'U':[0, 1], 'D':[0, -1], 'R':[1,0], 'L':[-1,0]}
+    locate = [5, 5]
+    
+    for direction in dirs:
+        x, y = locate
+        dx, dy = commands[direction]
+        newX = x + dx
+        newY = y + dy
+        
+        if(0<=newX<11 and 0<=newY<11):
+            locate = [newX, newY]
+            if (x, y, newX, newY) not in path and (newX, newY, x, y) not in path:
+                path.add((x, y, newX, newY))
+
+    return len(path)
