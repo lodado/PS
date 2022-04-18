@@ -1,0 +1,20 @@
+import math
+
+M = int(input())
+N = int(input())
+
+mini = N+1
+sums = 0
+
+for i in range(M, N+1):
+	sqrt = math.sqrt(i)
+	
+	if int(sqrt) == sqrt:
+		mini = min(mini, i)
+		sums+=i
+
+if mini==N+1:
+	print(-1)
+else:
+	print(sums)
+	print(mini)
