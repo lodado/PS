@@ -1,0 +1,59 @@
+from collections import deque
+from sys import maxsize
+
+col, row, T, D = map(int, input().split())
+arr = [list(input().rstrip()) for _ in range(col)]
+
+for y in range(col):
+	for x in range(row):
+		if 'A'<=arr[y][x]<='Z':
+			arr[y][x] = ord(arr[y][x])-65
+		elif 'a'<=arr[y][x]<='z':
+			arr[y][x] = ord(arr[y][x])-71
+
+dx = [0,0,1,-1]
+dy = [1,-1,0,0]
+
+def calulateMove(start, end):
+	global col, row, T, D
+	
+	if start>=end:
+		return 1
+	else:
+		return (end-start) * (end-start)
+
+def bfs(startX, startY):
+	global arr, col, row, T, D, dx, dy
+	
+	time = [[maxsize for _ in range(row)] for _ in range(col)]
+	
+	deq = deque([[startX, startY, 0]])
+	time[startY][startX] = 0
+	
+	while deq:
+		x, y, val = deq.popleft()
+		if val>time[y][x]:
+			continue
+		
+		for i in range(4):
+			newX = x + dx[i]
+			newY = y + dy[i]
+			
+			if(0<=newX<row and 0<=newY<col and abs(arr[newY][newX]-arr[y][x])<=T):
+				cost = val + calulateMove(arr[y][x], arr[newY][newX])
+				if time[newY][newX]>cost:
+					time[newY][newX] = cost
+					deq.append([newX, newY, cost])
+	return time
+	
+time = bfs(0, 0)
+ans = 0
+
+for y in range(col):
+	for x in range(row):
+		if time[y][x]<=D:
+			newTime = bfs(x, y)
+			if newTime[0][0] + time[y][x]<=D:
+				ans = max(ans, arr[y][x])			
+
+print(ans)
