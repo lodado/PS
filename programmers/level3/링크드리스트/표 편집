@@ -1,0 +1,71 @@
+class Node:
+    def __init__(self, val, index=0):
+        self.val = val
+        self.index = str(index)
+        self.prev = None
+        self.next = None
+
+def solution(n, k, cmd):
+    answer = []
+    st = []
+    
+    head = Node('O', 0)
+    currentCursor = head
+    cursor = head
+    answer.append(head)
+    index = 1
+    
+    while index<n:  
+        newNode = Node('O', index)
+        answer.append(newNode)
+        
+        cursor.next = newNode
+        tmp = cursor
+        cursor = cursor.next
+        cursor.prev = tmp
+        if index == k:
+            currentCursor = cursor
+        index+=1
+        
+    cursor = currentCursor
+    
+    for command in cmd:
+        command = command.split()
+        if len(command)<2:
+            if command[0] == 'Z' and st:
+                tmp = st.pop()
+                tmp.val = 'O'
+                after = tmp.next
+                before = tmp.prev
+                if after:
+                    after.prev = tmp
+                if before:
+                    before.next = tmp
+            else: # C
+                after = cursor.next
+                before = cursor.prev
+                tmp = cursor
+                if after:
+                    after.prev = cursor.prev
+                if before:
+                    before.next = cursor.next
+                cursor.val = 'X'
+                st.append(tmp)
+                if cursor.next:
+                    cursor = cursor.next
+                else:
+                    cursor = cursor.prev
+        else:
+            mv, count = command
+            count = int(count)
+           
+            if mv=='U':
+                while count>0 and cursor.prev:
+                    cursor = cursor.prev
+                    count-=1
+            else:
+                while count>0 and cursor.next:
+                    cursor = cursor.next
+                    count-=1
+            
+    return ''.join(list(map(lambda x:x.val, answer)))
