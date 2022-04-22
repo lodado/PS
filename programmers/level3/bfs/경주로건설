@@ -1,0 +1,46 @@
+from sys import maxsize
+from collections import deque
+
+dx = [0,0,1,-1]
+dy = [1,-1,0,0]
+
+def bfs(board, direct):
+    global ans, dx, dy, col, row
+    
+    visited = [[maxsize for _ in range(row)] for _ in range(col)]
+    visited[0][0] = 0
+    deq = deque([[0, 0, 0, direct]])
+    
+    while deq:
+        x, y, val, direction = deq.popleft()
+        
+        if y==col-1 and x==row-1:
+            continue
+    
+        if visited[y][x]<val:
+            continue
+        
+        for i in range(4):
+            newX, newY = x+dx[i], y+dy[i]
+            
+            if 0<=newX<row and 0<=newY<col \
+            and board[newY][newX]==0:
+                
+                newVal = val
+                
+                if direction==i:
+                    newVal += 100
+                else:
+                    newVal += 600
+                
+                if visited[newY][newX]>=newVal:
+                    visited[newY][newX] = newVal
+                    deq.append([newX, newY, newVal, i])
+    
+    return visited[-1][-1]
+    
+def solution(board):
+    global col, row
+    
+    col, row = len(board), len(board)
+    return min(bfs(board, 0), bfs(board, 2))
