@@ -1,0 +1,22 @@
+N = int(input())
+
+road = list(map(int, input().split()))
+city = list(map(int, input().split()))
+
+ans = 0
+i = 0
+while i<N:
+	
+	distance = 0
+	val = city[i]
+	
+	for j in range(i+1, N):
+		distance += road[j-1]
+		if val>city[j]:
+			break
+		i+=1
+	
+	ans += val * distance
+	i+=1
+	
+print(ans)
