@@ -1,0 +1,45 @@
+from sys import maxsize
+from collections import deque, Counter
+import copy
+
+[N, M] = map(int, input().split())
+arr = list(map(int, input().split()))
+
+ans = 0
+plugs = set()
+cnt = Counter(arr)
+
+for index, value in enumerate(arr):
+	
+	cnt[value]-=1
+	
+	if value in plugs:
+		continue
+	
+	if len(plugs)<N:
+		plugs.add(value)
+		continue
+	
+	target = None
+
+	for i in plugs:
+		if cnt[i]==0:
+			target = i
+			break
+		
+	if target!=None:
+		plugs.remove(target)
+		plugs.add(value)
+		ans+=1
+	else:
+		cpySet = copy.deepcopy(plugs)
+		for ind in range(index+1, len(arr)):
+			if len(cpySet)==1:
+				plugs.remove(list(cpySet)[0])
+				plugs.add(value)
+				ans+=1
+				break
+			elif arr[ind] in cpySet:
+				cpySet.remove(arr[ind])
+	
+print(ans)
