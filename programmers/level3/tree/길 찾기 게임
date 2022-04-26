@@ -1,0 +1,61 @@
+from sys import setrecursionlimit
+setrecursionlimit(10**9)
+import heapq
+
+class Node:
+    def __init__(self, num, index):
+        self.num = num
+        self.index = index
+        self.left = None
+        self.right = None
+    
+def preOrder(cursor):   
+    global answer
+    
+    if cursor:
+        answer[-1].append(cursor.index)
+        preOrder(cursor.left)
+        preOrder(cursor.right)     
+
+def postOrder(cursor):  
+    global answer
+    
+    if cursor:
+        postOrder(cursor.left)
+        postOrder(cursor.right)    
+        answer[-1].append(cursor.index)
+        
+def solution(nodeinfo):
+    global answer
+    
+    answer = [[]]
+    hq = []
+    
+    for index, [x, y] in enumerate(nodeinfo):
+        heapq.heappush(hq, [-y, x, index+1])
+    
+    first = heapq.heappop(hq)
+    head = Node(first[1], first[2])
+
+    while hq:
+        y, num, index = heapq.heappop(hq)
+        cursor = head
+        
+        while cursor:
+            if cursor.left and cursor.num>num:
+                cursor = cursor.left
+            elif cursor.right and cursor.num<num:
+                cursor = cursor.right
+            else:
+                break
+
+        if cursor.num>num:
+            cursor.left = Node(num, index)
+        else:
+            cursor.right = Node(num, index)
+    
+    preOrder(head)
+    answer.append([])
+    postOrder(head)
+    
+    return answer
