@@ -1,0 +1,61 @@
+import heapq
+from sys import maxsize
+
+col, row = map(int, input().split())
+arr = [list(input()) for i in range(col)]
+
+start = []
+end = []
+dx = [0, 0, 1, -1]
+dy = [1, -1, 0, 0]
+
+for y in range(col):
+	for x in range(row):
+		if(arr[y][x]=='F'):
+			end = [x, y]
+		elif(arr[y][x]=='S'):
+			start = [x, y]
+		elif(arr[y][x]=='.'):
+			flag = False
+			for i in range(len(dx)):
+				newX = x + dx[i]
+				newY = y + dy[i]
+				
+				if 0<=newX<row and 0<=newY<col and arr[newY][newX]=='g':
+					flag = True
+					break
+			if flag:
+				arr[y][x]= 'b'
+
+def search(startX, startY):
+	global dx, dy, arr, col, row, end
+	
+	hq = [[0, 0, startX, startY]]
+	visited = [[False for i in range(row)] for i in range(col)]
+	visited[startY][startX] = True
+	
+	while hq:
+		[gab, nearGab, x, y] = heapq.heappop(hq)
+		
+		if y==end[1] and x==end[0]:
+			print(gab, nearGab)
+			break
+		
+		for i in range(len(dx)):
+			newX = x + dx[i]
+			newY = y + dy[i]
+			
+			if 0<=newX<row and 0<=newY<col and not visited[newY][newX]:
+				visited[newY][newX] = 1
+				
+				newNearGab, newGab = nearGab, gab
+				
+				if arr[newY][newX]=='b':
+					newNearGab+=1
+				
+				if arr[newY][newX]=='g':
+					newGab+=1	
+					
+				heapq.heappush(hq, [newGab, newNearGab, newX, newY])
+	
+search(start[0], start[1])
