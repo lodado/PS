@@ -1,0 +1,30 @@
+# you can write to stdout for debugging purposes, e.g.
+# print("this is a debug message")
+
+def solution(S, P, Q):
+    ans = []
+    dic = {'A':0, 'C':1, 'G':2, 'T':3}
+    factor = [1, 2, 3, 4]
+    arr = [[0,0,0,0]]
+
+    for i in range(len(S)):
+        val = dic[S[i]]
+        arr.append([arr[-1][0], arr[-1][1], arr[-1][2], arr[-1][3]])
+        arr[-1][val]+=1
+
+    for start, end in zip(P, Q):
+        arr1 = arr[start]
+        arr2 = arr[end+1]
+
+        if start==end+1:
+            ans.append(dic[S[start]]+1)
+            continue
+
+        for i in range(4):
+            val = arr2[i] - arr1[i]
+
+            if val>0:
+                ans.append(factor[i])
+                break
+
+    return ans
