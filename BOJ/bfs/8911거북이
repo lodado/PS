@@ -1,0 +1,31 @@
+from sys import stdin, maxsize
+N = int(input())
+arr = [list(stdin.readline().rstrip()) for i in range(N)]
+
+# 동 남 서 북
+dx = [1, 0, -1, 0]
+dy = [0, 1, 0, -1]
+
+for lists in arr:
+	
+	direction = 3
+	[east, west] = [[0, 0], [0,0]]
+	locate = [0, 0]
+	
+	for i in lists:
+		
+		if i=='F':
+			locate = [locate[0] + dx[direction], locate[1] + dy[direction]]
+		elif i=='B':
+			locate = [locate[0] - dx[direction], locate[1] - dy[direction]]
+		elif i=='L':
+			direction = direction - 1
+			if direction<0:
+				direction = 3
+		else:
+			direction = (direction + 1) % 4
+		
+		east = [min(east[0], locate[0]), min(east[1], locate[1])]
+		west = [max(west[0], locate[0]), max(west[1], locate[1])]
+
+	print((west[0]-east[0]) * (west[1]-east[1]))	
