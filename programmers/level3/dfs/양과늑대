@@ -1,0 +1,47 @@
+import copy
+
+class Node:    
+    def __init__(self, index, info):
+        self.index = index
+        self.isWolf = info 
+        self.edge = []
+        
+    def init(self, edge):
+        self.edge.append(edge)
+
+def dfs(cursor, wolf, sheep, visited, nxtLocation):
+    global answer
+    
+    if visited[cursor.index]:
+        return
+    
+    visited[cursor.index] = True
+    
+    if cursor.isWolf:
+        wolf+=1
+    else:
+        sheep+=1
+        
+    answer = max(answer, sheep)
+    
+    if wolf>=sheep:
+        return
+    
+    nxtLocation.extend(cursor.edge)
+    
+    for nextCursor in nxtLocation:
+        dfs(nextCursor, wolf, sheep, copy.deepcopy(visited), [location for location in nxtLocation if not visited[location.index]])
+
+
+def solution(info, edges):
+    global answer
+    answer = 0
+    nodes = [Node(i, info[i]) for i in range(len(info))]
+    visited = [False for i in range(len(info))]
+    
+    for start, end in edges:
+        nodes[start].init(nodes[end])
+    
+    dfs(nodes[0], 0, 0, visited, [])
+    
+    return answer
