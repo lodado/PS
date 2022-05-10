@@ -1,0 +1,27 @@
+class Solution:
+    answer = []
+    N = 0
+    
+    def dfs(self, k, sums, last, sets, ans):
+
+        if k==0 and sums==self.N:
+            self.answer.append(sorted(list(ans)))
+            return 
+            
+        for i in sets ^ ans:
+            
+            if i>last:
+                ans.add(i)
+                self.dfs(k-1, sums+i, i, sets, ans)
+                ans.remove(i)
+            
+    
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        self.N = n
+        self.answer = []
+        
+        sets = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+        self.dfs(k, 0, -1, sets, set())
+        
+        return self.answer
+        
