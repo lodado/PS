@@ -1,0 +1,25 @@
+from sys import stdin
+
+def scan():
+	return list(map(int, stdin.readline().split()))
+
+[N, M] = scan()
+arr = scan()
+
+preSum = [0 for i in range(N)]
+mod = [0 for i in range(M)]
+preSum[0] = arr[0]
+ans = 0
+
+mod[preSum[0]%M]+=1
+
+for i in range(1, N):
+	preSum[i]= (arr[i] + preSum[i-1]) % M
+	mod[preSum[i]]+=1
+
+ans += mod[0]
+
+for i in range(M):
+	ans += (mod[i] * (mod[i]-1))//2
+	
+print(ans)
