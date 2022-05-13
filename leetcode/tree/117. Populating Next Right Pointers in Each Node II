@@ -1,0 +1,55 @@
+/**
+ * // Definition for a Node.
+ * function Node(val, left, right, next) {
+ *    this.val = val === undefined ? null : val;
+ *    this.left = left === undefined ? null : left;
+ *    this.right = right === undefined ? null : right;
+ *    this.next = next === undefined ? null : next;
+ * };
+ */
+
+/**
+ * @param {Node} root
+ * @return {Node}
+ */
+var connect = function(root) {
+    
+    const dict = new Map();
+    const st = [[root, 0]];
+    
+    if(!root){
+        return null;
+    }
+    
+    while(st.length>0){
+        
+        const [now, level] = st.pop();
+        
+        if(dict.has(level)){
+            dict.get(level).push(now);
+        }
+        else{
+            dict.set(level, [now]);
+        }
+        
+        if(now.right){
+            st.push([now.right, level+1]);
+        }
+        
+        if(now.left){
+            st.push([now.left, level+1]);
+        }
+
+    }
+    
+    for(const [_, arr] of dict){
+        let index = 0;
+        
+        while(index<arr.length){
+            arr[index].next = arr[index+1] ? arr[index+1] : null;
+            index+=1;
+        }
+    }
+
+    return root;
+};
