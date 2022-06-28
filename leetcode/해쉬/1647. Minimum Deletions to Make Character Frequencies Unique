@@ -1,0 +1,30 @@
+from collections import defaultdict 
+
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        
+        ans = 0
+        dic = defaultdict(int)
+        count = defaultdict(set)
+        
+        for i in s:
+            dic[i]+=1
+        
+        for k, v in dic.items():
+            count[v].add(k)
+        
+        for i, v in dic.items():
+            
+            if len(count[dic[i]])>=2:
+
+                for j in range(v-1, -1, -1):    
+                    if len(count[j])==0:   
+                        count[dic[i]].remove(i)
+                        ans+=v-j
+                        
+                        if(j!=0):
+                            count[j].add(i)
+                        break
+
+        return ans
+                    
