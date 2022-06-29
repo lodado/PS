@@ -1,0 +1,26 @@
+from collections import defaultdict, deque
+
+def solution(cacheSize, cities):
+    answer = 0
+    
+    if cacheSize == 0:
+        return len(cities) * 5
+    
+    dic = set()
+    deq = deque()
+    
+    for i in map(str.lower, cities):
+        
+        if i in dic:
+            answer+=1
+            if deq:
+                deq.remove(i)
+            deq.append(i)
+        else:
+            answer+=5    
+            if len(deq)>=cacheSize:
+                dic.remove(deq.popleft())
+            deq.append(i)
+            dic.add(i)
+            
+    return answer
