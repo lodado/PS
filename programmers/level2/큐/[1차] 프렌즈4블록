@@ -1,0 +1,42 @@
+from collections import deque
+import copy
+
+def solution(m, n, inputs):
+    ans = 0
+    board = [[inputs[j][i] for i in range(n)] for j in range(m)]
+    
+    while True:
+        flag = True
+        checked = [[False for i in range(n)] for j in range(m)]
+        
+        for y in range(m-1):
+            for x in range(n-1):
+                
+                if(board[y][x] != '' and board[y][x] == board[y+1][x+1] and \
+                   board[y][x] == board[y+1][x] and board[y][x] == board[y][x+1]):
+                    checked[y][x] = checked[y+1][x] = checked[y][x+1] = checked[y+1][x+1] = True
+                    
+        for y in range(m):
+            for x in range(n):
+                if checked[y][x]:
+                    flag = False
+                    ans+=1
+                    board[y][x]=''
+        
+        for x in range(n):
+            que = deque([])
+            
+            for y in range(m-1, -1, -1):
+                if board[y][x] != '':
+                    que.append(board[y][x])
+                    board[y][x] = ''
+            
+            y = m-1
+            while que:   
+                board[y][x] = que.popleft()
+                y-=1
+                
+        if flag:
+            break
+    
+    return ans
