@@ -1,0 +1,29 @@
+def solution(files):  
+    
+    ans = []    
+    
+    for file in files:
+        
+        flag = True
+        word = ['']
+        
+        for i in file:    
+            if '0'<=i<='9':
+                if flag:
+                    flag = False
+                    word.append('')
+            else:
+                if not flag:
+                    flag = True
+                    word.append('')
+            word[-1]+=i
+
+        if len(word)<=2:
+            word.append('')
+        
+        ans.append(word)
+    
+    ans.sort(key=lambda x:(x[0].lower(), int(x[1])))
+    
+    return list(map(lambda x:''.join(x), ans))
+    
