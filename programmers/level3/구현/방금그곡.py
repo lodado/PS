@@ -1,49 +1,37 @@
-def timeToSec(time):
-    hours, minute = time.split(':')
-    return int(minute) + int(hours)*60
-    
+def timeToMin(time):
+    HH, MM = time.split(':')
+    return int(HH) * 60 + int(MM)  
+
 def solution(m, musicinfos):
-    ans = []
-    m = list(m)
-    cmpList = []
-    for i in m:
-        if(i=='#'):
-            cmpList[-1]+='#'
+        
+    dic =  {'C#':'!', 'D#' : '@', 'F#': '^', 'G#' : '$', 'A#' : '%' }
+    music = []
+    
+    for i in range(len(musicinfos)):
+        
+        start, end, name, song = musicinfos[i].split(',')
+        music.append([i, timeToMin((start)), timeToMin((end)), name, song])
+    
+    music.sort(key=lambda x: ((x[1]-x[2]), x[0]))
+    
+    for k, v in dic.items():
+        m = m.replace(k, v)
+        
+        for i in range(len(musicinfos)):
+            music[i][4] = music[i][4].replace(k, v)
+            
+    for index, start, end, name, song in music:
+        time = end - start
+        
+        word =  ''
+        
+        if len(song)>=time:
+            word = song[:time]
         else:
-            cmpList.append(i)
+            word = song * ((time) // len(song))
+            word += song[:(time) % len(song)]
+        
+        if m in word:
+            return name
     
-    for ind, i in enumerate(musicinfos):
-        startTime, endTime, name, content = i.split(',')
-        sec = timeToSec(endTime) - timeToSec(startTime)
-        totalTime = sec
-        
-        lyrics = []
-        index = 0
-        
-        while(sec>0):
-            now = content[index]
-            if(index+1<len(content) and content[index+1]=='#'):
-                now +='#'
-                index+=1
-            lyrics.append(now)
-            index+=1
-            sec-=1
-            if(index>=len(content)):
-                index = index % len(content)
-        
-        index = 0
-        
-        for lyric in lyrics:
-            if(lyric==cmpList[index]):
-                index+=1
-            else:
-                index=0
-                if(cmpList[0]==lyric):
-                    index+=1
-                
-            if(index>=len(cmpList)):
-                ans.append([-totalTime, ind, name])
-                break
-    
-    ans.sort(key=lambda x:(x[0], x[1]))
-    return ans[0][2] if ans else '(None)'
+    return '(None)'
