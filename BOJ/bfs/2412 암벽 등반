@@ -1,0 +1,33 @@
+from sys import stdin
+from collections import defaultdict, deque
+
+def scan():
+	return list(map(int, stdin.readline().split()))
+
+[N, M] = scan()
+arr = [scan() for i in range(N)]
+dic = defaultdict(int)
+deq = deque()
+
+for i in arr:
+	dic[str(i)] = 1
+
+deq.append([0, 0, 0])
+while deq:
+	x, y, cnt = deq.popleft()
+	
+	if(y==M):
+		print(cnt)
+		break
+	
+	for xx in range(x-2, x+3):
+		for yy in range(y-2, y+3):
+			
+			if 0>xx or 0>yy:
+				continue
+			
+			if dic[str([xx, yy])]==1:
+				dic[str([xx, yy])] = 0
+				deq.append([xx, yy, cnt+1])
+else:
+	print(-1)
