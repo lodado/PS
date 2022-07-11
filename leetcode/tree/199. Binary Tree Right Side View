@@ -1,0 +1,33 @@
+from collections import deque, defaultdict
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        
+        if not root:
+            return []
+        
+        deq = deque()
+        deq.append([0, root])
+        dic = defaultdict(list)
+        ans = []
+        
+        while deq:
+            index, current = deq.popleft()
+            dic[index].append(current.val)
+            
+            if current.left:
+                deq.append([index+1, current.left])
+            if current.right:
+                deq.append([index+1, current.right])
+        
+        for k, v in sorted(dic.items(), key=lambda x:x[0]):
+            ans.append(v[-1])
+        
+        return ans
