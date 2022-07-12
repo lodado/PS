@@ -1,0 +1,22 @@
+from sys import stdin
+input = stdin.readline
+
+N = int(input())
+arr = [list(map(int, input().split())) for _ in range(N)]
+dp = [[[0, 0, 0] for i in range(N)] for _ in range(N)] # 오른 대각 아래
+dp[0][1][0] = 1 
+
+for y in range(N):
+	for x in range(N):
+		now = dp[y][x]
+		
+		if(y+1<N and arr[y+1][x]==0): # 아래
+			dp[y+1][x][2] += now[2] + now[1]
+		
+		if(x+1<N and arr[y][x+1]==0): # 오른
+			dp[y][x+1][0] += now[0] + now[1]
+			
+			if(y+1<N and arr[y+1][x]==0 and arr[y+1][x+1]==0): # 대각
+				dp[y+1][x+1][1] += now[0] + now[1] + now[2]
+	
+print(sum(dp[N-1][N-1]))
