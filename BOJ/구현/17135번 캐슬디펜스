@@ -1,0 +1,73 @@
+from sys import stdin
+from collections import deque
+from itertools import combinations
+import copy
+
+input = stdin.readline
+
+def scan():
+	return list(map(int, input().split()))
+
+ans = 0
+[N, M, D] = scan()
+
+array = []
+dx = [-1,0,0,1]
+dy = [0,1,-1,0]
+
+for i in range(N):
+	array.append(scan())
+
+def move(arr):
+	for y in range(N-1, 0, -1):
+		for x in range(M):
+			arr[y][x] = arr[y-1][x] 
+			arr[y-1][x] = 0
+			
+def attack(arr, startX, startY):
+
+	container = []
+	
+	for y in range(N):
+		for x in range(M):
+			if arr[y][x] == 1:
+				delta = abs(y-startY) + abs(x-startX)
+			
+				if delta<=D:
+					container.append([delta, x, y])
+	
+	container.sort(key=lambda x: (x[0], x[1]))
+	
+	return container[0] if container else []
+			
+def search(archers):
+	global ans 
+	arr = copy.deepcopy(array)
+	result = 0
+	
+	for i in range(N):
+		
+		container = []
+		
+		for x, y in archers:
+			val = attack(arr, x, y)
+			if val:
+				container.append(val)
+		
+		for _, x, y in container:
+			if arr[y][x]==1:
+				result+=1
+				arr[y][x]=0
+		move(arr)
+
+	ans = max(ans, result)
+
+for ar1, ar2, ar3 in combinations([i for i in range(M)], 3):
+	
+	x1, y1 = ar1, N
+	x2, y2 = ar2, N
+	x3, y3 = ar3, N
+	
+	search([[x1, y1], [x2, y2], [x3, y3]])
+
+print(ans)
