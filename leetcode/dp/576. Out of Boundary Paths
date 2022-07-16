@@ -1,0 +1,21 @@
+class Solution:
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        
+        dp = [[[-1 for i in range(n)] for j in range(m)] for _ in range(maxMove+1)]
+        
+        def dfs(curRow,curCol,maxMove):
+            
+            if curRow >= m or curRow < 0 or curCol >= n or curCol < 0:
+                return 1
+            
+            if dp[maxMove][curRow][curCol] !=-1:
+                return dp[maxMove][curRow][curCol]
+            
+            if maxMove <= 0:
+                dp[maxMove][curRow][curCol] = 0
+            else:
+                dp[maxMove][curRow][curCol] = (dfs(curRow-1,curCol,maxMove-1)+dfs(curRow+1,curCol,maxMove-1)+dfs(curRow,curCol-1,maxMove-1)+dfs(curRow,curCol+1,maxMove-1)) % (10**9 + 7)
+            
+            return dp[maxMove][curRow][curCol]
+        
+        return (dfs(startRow, startColumn, maxMove))       
