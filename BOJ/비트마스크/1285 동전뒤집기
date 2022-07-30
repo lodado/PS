@@ -1,0 +1,36 @@
+N = int(input())
+arr = []
+revArr = []
+answer = N * N + 1
+
+for i in range(N):
+    container = []
+    revContainer = []
+    for i in input().rstrip():
+        if i=='H': # 앞면
+            container.append(True)
+            revContainer.append(False)
+        else: # 뒷면
+            container.append(False)
+            revContainer.append(True)
+    arr.append(container)
+    revArr.append(revContainer)
+
+for bit in range(1<<N):
+    tmp = []
+    
+    for i in range(N):
+        tmp.append((revArr[i] if bit & 1<<i else arr[i]))
+    
+    total = 0
+    
+    for i in range(N):
+        cnt = 0
+        for j in range(N):
+            if not tmp[j][i]:
+                cnt+=1
+        total += min(cnt, N-cnt)
+    
+    answer = min(answer, total)
+
+print(answer)
