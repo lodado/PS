@@ -1,0 +1,41 @@
+from sys import stdin, maxsize
+import heapq
+
+input = stdin.readline
+
+def scan():
+    return list(map(int, input().split()))
+
+T = int(input())
+
+for i in range(T):
+    [N, M, K] = scan()
+    nodes = [[] for i in range(N+1)]
+    dist = [[maxsize for j in range(M+1)] for _ in range(N+1)]
+
+    for _ in range(K):
+        [start, end, cost, time] = scan()
+        nodes[start].append([end, cost, time])
+    
+    hq = [[0, 0, 1]] 
+    
+    while hq:
+        totalTime, totalCost, index = heapq.heappop(hq)
+        if totalTime > dist[index][totalCost]:
+            continue
+        
+        for nextIndex, cost, time in nodes[index]:
+            newCost = cost+totalCost
+            newTime = totalTime + time
+            if M >= newCost and dist[nextIndex][newCost] > newTime:
+                
+                for i in range(newCost, M+1):
+                    if dist[nextIndex][i] > newTime:
+                        dist[nextIndex][i] = newTime
+                    else:
+                        break
+                
+                heapq.heappush(hq, [newTime, newCost, nextIndex])
+    
+    print(dist[-1][M] if dist[-1][M] != maxsize else 'Poor KCM')
+                    
