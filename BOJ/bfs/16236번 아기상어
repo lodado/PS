@@ -1,0 +1,73 @@
+from sys import stdin, maxsize
+from collections import defaultdict, deque
+
+input = stdin.readline
+
+def scan():
+    return list(map(int, input().split()))
+
+N = int(input())
+ans = 0
+
+arr = [scan() for i in range(N)]
+dic = defaultdict(list)
+level = 2
+locate = []
+dx = [0,0,1,-1]
+dy = [1,-1,0,0]
+
+for y in range(N):
+    for x in range(N):
+        if(arr[y][x]==9):
+            locate = [y, x]
+        elif(arr[y][x]!=0):
+            dic[arr[y][x]].append([y, x])
+
+
+while True:
+    
+    currentLevel = level
+
+    while(currentLevel>0):            
+        nowY, nowX = locate
+        container = []
+        arr[nowY][nowX] = 0
+        
+        newX, newY = -1, -1
+        
+        deq = deque([[nowX, nowY, 0]])
+        visited = [[False for i in range(N)] for j in range(N)]
+        visited[nowY][nowX] = True
+        
+        while deq:
+            x, y, length = deq.popleft()
+            
+            if arr[y][x]>0 and arr[y][x] < level:
+                container.append([length, x, y])
+            
+            for i in range(4):
+                nx = dx[i] + x
+                ny = dy[i] + y
+                
+                if(0<=nx<N and 0<=ny<N and not visited[ny][nx] and arr[ny][nx]<=level):
+                    visited[ny][nx] = True
+                    deq.append([nx, ny, length+1])
+        
+        container.sort(key=lambda x: (x[0], x[2], x[1]))
+        
+        if not container:
+            break
+        
+        [dist, newX, newY] = container[0]
+        ans+=dist
+        locate = [newY, newX]
+        arr[newY][newX] = 0
+        currentLevel-=1
+        
+    if currentLevel==0:
+        level+=1
+    else:
+        break
+
+print(ans)
+
