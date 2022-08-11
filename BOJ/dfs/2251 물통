@@ -1,0 +1,34 @@
+import copy
+from itertools import permutations
+
+ans = set()
+limit = list(map(int, input().split()))
+sets = set()
+permu = list(permutations([0,1,2], 2))
+
+def transferWater(water, froms, to):
+    
+    if water[froms] + water[to] > limit[to]:
+        water[froms] = water[froms] + water[to] - limit[to]
+        water[to] = limit[to]
+    else:
+        water[froms], water[to] = 0, water[froms] + water[to]
+
+def dfs(water=[0, 0, limit[2]]):
+    
+    key = str(water)
+    
+    if key in sets:
+        return
+    
+    sets.add(key)
+    if water[0]==0:
+        ans.add(water[-1])
+    
+    for take, give in permu:
+        newWater = copy.deepcopy(water)
+        transferWater(newWater, take, give)
+        dfs(newWater)
+    
+dfs()
+print(*sorted(ans))
