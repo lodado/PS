@@ -1,0 +1,44 @@
+from sys import stdin, maxsize
+import heapq
+
+def scan():
+    return list(map(int, stdin.readline().split()))
+
+[N, M] = scan()
+nodes = [[] for i in range(N+1)]
+
+for _ in range(M):
+    [start, end, weight] = scan()
+    
+    nodes[start].append([end, weight])
+    nodes[end].append([start, weight])
+
+def dijkstra(start, end):
+    
+    if start == end:
+        return 0
+    
+    dist = [maxsize for _ in range(N+1)]
+    hq = [[0, start]]
+    dist[start] = 0
+    
+    while hq:
+        length, now = heapq.heappop(hq)
+        
+        if length>dist[now]:
+            continue
+        
+        for index, weight in nodes[now]:
+            
+            if dist[index] > length + weight:
+                dist[index] = length + weight
+                heapq.heappush(hq, [dist[index], index])
+    
+    return dist[end]
+    
+[A, B] = scan()
+
+ans = min(dijkstra(1, A)+ dijkstra(A, B) + dijkstra(B, N), dijkstra(1, B)+ dijkstra(B, A) + dijkstra(A, N))
+
+print(ans if ans<maxsize else -1)      
+    
