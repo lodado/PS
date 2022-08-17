@@ -1,0 +1,27 @@
+import math
+
+N = int(input())
+length = 1299710
+arr = [True for i in range(length+1)]
+prime = []
+
+for i in range(2, int((length)+1)):
+    if arr[i]:
+        prime.append(i)
+        for j in range(i, length, i):
+            arr[j] = False
+
+for _ in range(N):
+    number = int(input())
+    
+    cnt = 0
+    flag = True
+    
+    while prime[cnt]<number:
+        cnt+=1
+       
+    if prime[cnt]==number:
+        print(0)
+    elif cnt>0:
+        print(prime[cnt]-prime[cnt-1])
+    
