@@ -1,0 +1,27 @@
+import heapq
+from sys import stdin
+input = stdin.readline
+
+N = int(input())
+ans = []
+leftHeap = []
+rightHeap = []
+
+for _ in range(N):
+    num = int(input())
+    
+    if len(leftHeap) == len(rightHeap):
+        heapq.heappush(leftHeap, -num)
+    else:
+        heapq.heappush(rightHeap, num)
+    
+    if rightHeap and -leftHeap[0] > rightHeap[0]:
+        
+        big, small = -heapq.heappop(leftHeap), heapq.heappop(rightHeap)
+        heapq.heappush(leftHeap, -small)
+        heapq.heappush(rightHeap, big)
+        
+    ans.append(-leftHeap[0])
+
+for i in ans:
+    print(i, end=' ')
