@@ -1,0 +1,17 @@
+from itertools import combinations
+from collections import Counter
+
+class Solution:
+    def minSetSize(self, arr: List[int]) -> int:
+        
+        ans = 0
+        cnt = Counter(arr)
+        length = len(arr)
+        
+        for k, v in sorted(cnt.items(), key=lambda x:(-x[1])):
+            ans+=1
+            length -= v
+            
+            if length<=len(arr)//2:
+                return ans
+            
