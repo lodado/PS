@@ -1,0 +1,33 @@
+dic = {'I':1, 'IV':4, 'V':5, 'IX':9, 'X':10, 'XL':40, 'L':50, 'XC':90, 'C':100, 'CD':400, 'D':500, 'CM':900, 'M':1000}
+
+word1, word2 = input().rstrip(), input().rstrip()
+
+def wordToNumber(word):
+    ans, i = 0, 0
+    
+    while i<(len(word)):
+        if i+1 <= len(word) and word[i:i+2] in dic:
+            ans += dic[word[i:i+2]]
+            i+=2
+            continue
+
+        ans += dic[word[i]]
+        i +=1
+
+    return ans
+
+def numberToWord(num):
+    ans = ''
+    
+    for k, v in sorted(dic.items(), key=lambda x:-x[1]):
+        count = num // v
+        
+        num -= v * count
+        ans += k * count
+    
+    return ans
+
+number = wordToNumber(word1) + wordToNumber(word2)
+
+print(number)
+print(numberToWord(number))
