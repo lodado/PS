@@ -1,0 +1,47 @@
+import sys
+import heapq
+
+def scan():
+	return list(map(int, sys.stdin.readline().split()))
+[N, M] = scan()
+
+ans = 0
+arr = [scan() for _ in range(N)]
+nodes = [i for i in range(N+1)]
+edges = []
+
+for i in range(N):
+    for j in range(i, N):
+        if i==j:
+            continue
+    
+        x1, y1 = arr[i]
+        x2, y2 = arr[j]
+        heapq.heappush(edges, [((x1-x2)**2 + (y1-y2)**2) ** (1/2), i+1, j+1])
+
+def getParent(n):
+    if n == nodes[n]:
+        return n
+    
+    nodes[n] = getParent(nodes[n])
+    return nodes[n]
+        
+for _ in range(M):
+    [start, end] = scan()
+    heapq.heappush(edges, [0, start, end])
+
+while edges:
+    dist, start, end = heapq.heappop(edges)
+
+    if start>end:
+        end, start = start, end
+    
+    start = getParent(start)
+    end = getParent(end)
+    
+    if start!=end:
+        nodes[end] = start
+        ans += dist
+
+print('%0.2f'%round(ans, 3))
+    
