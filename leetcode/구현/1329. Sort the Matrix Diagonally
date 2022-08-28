@@ -1,0 +1,31 @@
+class Solution:   
+    def diagonalSort(self, mat: List[List[int]]) -> List[List[int]]:
+        row, col = len(mat[0]), len(mat)
+        startX, startY = 0, col-1
+        arr = []
+        
+        def wrapper(func):
+            x, y = startX, startY
+            while x<row and y<col:
+                func(x, y)
+                x+=1
+                y+=1
+                
+        def appendMat(x, y):
+            arr.append(mat[y][x])
+        
+        def changeMat(x, y):
+            mat[y][x] = arr.pop()
+        
+        while startX<row and startY<col:
+            arr = []
+            wrapper(appendMat)
+            arr.sort(key=lambda x:-x)
+            wrapper(changeMat)
+           
+            if startY != 0:
+                startY-=1
+            else:
+                startX+=1
+        
+        return mat
