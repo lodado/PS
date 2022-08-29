@@ -1,0 +1,21 @@
+from sys import stdin
+
+K = int(input())
+arr = list(map(int, input().split()))
+dic = [[] for i in range(11)]
+
+def dfs(arr, left, right, depth):
+    mid = (left+right)//2
+    
+    if right-left>0:
+        dic[depth].append(arr[mid])
+        dfs(arr, left, mid, depth+1)
+        dfs(arr, mid+1, right, depth+1)
+        
+dfs(arr, 0, len(arr), 0)
+
+for i in range(11):
+    if not dic[i]:
+        break
+    
+    print(*dic[i])
