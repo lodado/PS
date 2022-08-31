@@ -1,0 +1,29 @@
+from collections import Counter
+
+S, P = map(int, input().split())
+word = input().rstrip()
+dna = list(map(int, input().split()))
+cnt = Counter(word[:P])
+ans = 0
+
+def countWord():
+    global ans
+    
+    flag = True
+    for index, j in enumerate(["A","C","G","T"]):
+        if dna[index]>cnt[j]:
+            flag = False
+            break
+        
+    if flag:
+        ans+=1
+
+countWord()
+
+for i in range(S-P):
+    cnt[word[i]] -=1
+    cnt[word[i+P]]+=1
+    
+    countWord()
+
+print(ans)
