@@ -1,0 +1,25 @@
+from collections import defaultdict
+
+N = int(input())
+dic = defaultdict(int)
+
+words = [input().rstrip() for _ in range(N)]
+words.sort(key=lambda x:-len(x))
+
+ans, num = 0, 9
+
+for word in words:
+    for j in range(len(word)):
+        dic[word[j]] += 10 ** (len(word)-j)   
+        
+wordDic = defaultdict(int)
+        
+for k, v in sorted(dic.items(), key=lambda x:-x[1]):
+    wordDic[k] = num
+    num-=1
+
+for word in words:
+    for j in range(len(word)):
+        ans += wordDic[word[j]] * (10 ** (len(word)-j-1)) 
+
+print(ans)
