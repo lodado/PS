@@ -1,0 +1,26 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+from collections import defaultdict
+
+class Solution:
+    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+        
+        dic = defaultdict(list)
+        st = [[root, 0]]
+        
+        while st:
+            now, level = st.pop()
+            dic[level].append(now.val)
+            
+            if now.left:
+                st.append([now.left, level+1])
+            if now.right:
+                st.append([now.right, level+1])
+        
+        return [sum(v) / len(v) for k, v in sorted(dic.items(), key=lambda x:x[0])]         
+        
