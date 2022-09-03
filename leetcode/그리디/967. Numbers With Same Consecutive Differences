@@ -1,0 +1,25 @@
+class Solution:
+    def numsSameConsecDiff(self, n: int, k: int) -> List[int]:
+        ans = []
+        
+        for i in range(1, 10):
+            if(k==0):
+                ans.append(str(i) * n)
+                continue
+
+            st = [[str(i), 1]]
+            
+            while st:
+                val, length = st.pop()
+                now = int(str(val)[-1])
+                
+                if length == n:
+                    ans.append(val)
+                    continue
+                
+                if(0<=k+now<10):
+                    st.append([val+str(k+now), length+1])  
+                if(0<=now-k<10):
+                    st.append([val+str(now-k), length+1])
+       
+        return ans
