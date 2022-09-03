@@ -1,0 +1,43 @@
+from sys import stdin
+
+input = stdin.readline
+
+for _ in range(int(input())):
+    func = list(input().rstrip())
+    N = int(input())
+    st = []
+    ans = []
+    
+    arr = input().lstrip('[').rstrip(']\n').split(',')
+    if N>0:
+        st = arr
+    
+    flag = True
+    left, right = 0, len(st)-1
+    cursor = True;
+    
+    for i in func:    
+        if i == 'R':
+            cursor = not cursor
+        else:
+            if not left<=right:
+                flag = False
+                print('error')
+                break
+            else:
+                if cursor:
+                    ans.append(st[left])
+                    left+=1
+                else:
+                    ans.append(st[right])
+                    right-=1
+    
+    if flag:
+        print('[', end='')
+        if not cursor:
+            ans = st[left:right+1]
+            print(','.join(ans[::-1]), end='')   
+        else:
+            print(','.join(st[left:right+1]), end='')    
+        print(']', end='')
+        print()
