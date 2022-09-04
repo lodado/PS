@@ -1,0 +1,28 @@
+from sys import stdin
+input = stdin.readline
+
+N = int(input())
+arr = [0 for i in range(366)]
+
+for _ in range(N):
+    start, end = map(int, input().split())
+    for i in range(start, end+1):
+        arr[i]+=1
+ans = 0
+i = 0
+
+while(i<366):
+    if arr[i]>0:
+        start = i
+        height = arr[i]
+        while(i<366 and arr[i]!=0):
+            height = max(arr[i], height)
+            i+=1
+        
+        width = i - start 
+        ans += height * width
+    else:
+        i+=1
+
+print(ans)
+        
