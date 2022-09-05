@@ -1,0 +1,29 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+from collections import defaultdict, deque
+
+class Solution:
+    def levelOrder(self, root: 'Node') -> List[List[int]]:
+        dic = defaultdict(list)
+        
+        st = deque([[root, 0]])
+        dic[0] = []
+        
+        while st:
+            now, level = st.popleft()
+            
+            if not now:
+                return []
+            
+            dic[level].append(now.val)
+            
+            for i in now.children:
+                st.append([i, level+1])
+                
+        return [v for k, v in sorted(dic.items(), key=lambda x:x[0])]
