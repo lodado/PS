@@ -1,0 +1,34 @@
+from sys import setrecursionlimit
+setrecursionlimit(10**6)
+
+N, r, c = map(int, input().split())
+N = 2 ** N
+cnt = 0
+delta =  [[0,0], [1,0], [0,1], [1,1]]
+flag = False
+
+def dfs(x, y, length):
+    global cnt, flag, delta
+    
+    if flag:
+        return
+    
+    if length<=2:
+        for dx, dy in delta:
+            newX, newY = x + dx, y + dy 
+            if newY == r and newX == c:
+                flag = True
+                print(cnt)
+                break
+            cnt+=1
+    else:
+        newLength = length//2
+        for dx, dy in delta:
+            newX, newY = x + newLength * dx, y + newLength * dy
+            
+            if not flag and newX<=c<=newX+newLength and newY<=r<=newY+newLength: 
+                dfs(newX, newY, newLength)
+            else:
+                cnt += newLength * newLength
+                
+dfs(0, 0, N)
