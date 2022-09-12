@@ -1,0 +1,24 @@
+from collections import Counter
+
+N = int(input())
+arr = sorted(list(map(int, input().split())))
+ans = 0
+
+for i in range(N):   
+    now = arr[i]
+    tmp = arr[:i] + arr[i+1:]
+    left, right = 0, len(tmp)-1
+    
+    while left<right:
+        sums = tmp[left] + tmp[right]
+        
+        if sums == now:
+            ans+=1
+            break
+        
+        if sums<now:
+            left+=1
+        else:
+            right-=1
+        
+print(ans)
