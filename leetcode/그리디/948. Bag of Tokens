@@ -1,0 +1,22 @@
+from collections import deque
+
+class Solution:
+    def bagOfTokensScore(self, tokens: List[int], power: int) -> int:
+        
+        deq = deque(sorted(tokens))
+        score = 0
+        
+        while deq:
+            head, tail = deq[0], deq[-1]
+
+            if power >= head:
+                power -= deq.popleft()
+                score+=1
+            else:
+                if len(deq)>1 and score>0:
+                    power += deq.pop()
+                    score-=1
+                else:
+                    break
+        
+        return score
