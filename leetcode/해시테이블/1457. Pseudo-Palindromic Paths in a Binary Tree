@@ -1,0 +1,39 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import Counter
+from sys import setrecursionlimit
+setrecursionlimit(10**9)
+
+class Solution:
+    def pseudoPalindromicPaths (self, root: Optional[TreeNode]) -> int:
+        self.answer = 0
+        self.cnt = Counter()
+
+        def dfs(now):    
+            self.cnt[now.val]+=1
+            
+            if now.left:
+                dfs(now.left)
+            
+            if now.right:
+                dfs(now.right)
+            
+            if not now.left and not now.right:
+                odd = 0
+
+                for k, v in self.cnt.items():
+                    if v % 2 != 0:
+                        odd+=1
+                        
+                if 0<=odd<=1:
+                    self.answer+=1
+                    
+            self.cnt[now.val]-=1
+            
+        dfs(root)
+        
+        return self.answer
