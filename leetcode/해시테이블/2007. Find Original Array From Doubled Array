@@ -1,0 +1,32 @@
+from collections import Counter
+
+class Solution:
+    def findOriginalArray(self, changed: List[int]) -> List[int]:
+        dic = Counter(changed)
+        ans = []
+        zeroCount = 0
+        
+        for i in sorted(changed):
+            
+            if i == 0:
+                zeroCount += 1
+            elif dic[i]>0 and dic[i * 2]>0:
+                ans.append(i)
+                dic[i]-=1
+                dic[i*2]-=1
+                
+                if dic[i]==0:
+                    del dic[i]
+                    
+                if dic[i*2]==0:
+                    del dic[i*2]
+                
+        if zeroCount>0 and zeroCount % 2 == 0:
+            ans.extend([0 for _ in range(zeroCount // 2)]) 
+            dic[0] -= zeroCount
+            
+            if not dic[0]:
+                del dic[0]
+        
+        return ans if not dic else []     
+                
