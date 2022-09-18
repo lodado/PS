@@ -1,0 +1,45 @@
+from collections import defaultdict
+
+N, M = map(int, input().split())
+dic = defaultdict(int)
+arr = []
+
+for _ in range(N):
+    word, cost = input().split()
+    dic[word] = int(cost)
+
+for _ in range(M):
+    lvalue, rvalue = input().split('=')
+    wordDic = defaultdict(int)
+    
+    for word in rvalue.split('+'):
+        for j in range(len(word)):
+            if not '0'<=word[j]<='9':
+                wordDic[word[j:]] += int(word[:j])
+                break
+    
+    arr.append([lvalue, wordDic])
+
+i= 0
+while i<=(M*M):
+
+    for lvalue, now in arr:
+        val = 0
+        count = 0
+
+        for k, v in now.items():
+            if k in dic:
+                val += dic[k] * v
+                count+=1
+        
+        if count == len(now):
+            if lvalue in dic:
+                dic[lvalue] = min(dic[lvalue], val)
+            else:
+                dic[lvalue] = val
+    i+=1
+
+if 'LOVE' in dic:
+    print(dic['LOVE'] if dic['LOVE']<=1000000000 else 1000000001  )
+else:
+    print(-1)
