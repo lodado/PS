@@ -1,0 +1,16 @@
+from collections import defaultdict
+N, M = map(int, input().split())
+
+ans = 0
+arr = [input().rstrip() for i in range(N)]
+k = int(input())
+
+dic = defaultdict(int)
+
+for i in arr:
+    count = i.count('0')
+    if count<=k and count%2 == k%2:
+        dic[str(i)]+=1
+
+print(sorted(dic.values())[-1] if dic else 0)
+    
