@@ -1,0 +1,16 @@
+from collections import defaultdict 
+
+class Solution:
+    def findDuplicate(self, paths: List[str]) -> List[List[str]]:
+        dic = defaultdict(list)
+        
+        for i in paths:
+            arr = i.split()
+            path, files = arr[0], arr[1:]
+            
+            for file in files:
+                fileName, categoryName = file.split('(')
+                dic[categoryName[:-1]].append(path+'/'+fileName)
+        
+        return [i for i in dic.values() if len(i)>1]
+        
