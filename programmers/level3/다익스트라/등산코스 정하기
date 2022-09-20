@@ -1,0 +1,41 @@
+from sys import maxsize
+import heapq
+
+def solution(n, paths, gates, summits):
+    ans = [[0, maxsize]]
+    summitSets = set()
+    visited = [maxsize for i in range(n+1)]
+    nodes = [[] for _ in range(n+1)]
+    hq = []
+    
+    for summit in summits:
+        summitSets.add(summit)
+        
+    for start, end, intensity in paths:
+        nodes[start].append([end, intensity])
+        nodes[end].append([start, intensity])
+    
+    for gate in gates:
+        heapq.heappush(hq, [0, gate])
+        visited[gate] = 0
+        
+    while hq:
+        intensity, now = heapq.heappop(hq)
+            
+        if now in summitSets or intensity > visited[now]:
+            continue
+            
+        for nextIndex, nextIntensity in nodes[now]:
+                
+            newIntensity = max(intensity, nextIntensity)
+            if visited[nextIndex] > newIntensity:
+                visited[nextIndex] = newIntensity
+                heapq.heappush(hq, [newIntensity, nextIndex])
+        
+    for summit in summits:
+        if visited[summit] < ans[0][1]:
+            ans = [[summit, visited[summit]]]
+        elif visited[summit] == ans[0][1]:
+            ans.append([summit, visited[summit]])
+                
+    return sorted(ans, key=lambda x:x[0])[0]
