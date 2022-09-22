@@ -1,0 +1,31 @@
+from sys import stdin, maxsize
+input = stdin.readline
+
+N = int(input())
+arr = [list(map(int, input().split())) for _ in range(N)]
+
+dp = [[0 for _ in range(1 << N)] for _ in range(N)]
+
+def dfs(cursor, visited):
+    
+    if dp[cursor][visited]>0:
+        return dp[cursor][visited]
+    
+    if visited == (1 << N) - 1:
+        if arr[cursor][0]>0:
+            return arr[cursor][0]
+        else:
+            return maxsize
+        
+    minDist = maxsize
+    
+    for i in range(N):    
+        if visited & 1 << i or arr[cursor][i] == 0:
+            continue
+        
+        minDist = min(minDist, dfs(i, visited | 1 << i) + arr[cursor][i])
+    
+    dp[cursor][visited] = min(minDist)
+    return dp[cursor][visited]
+
+print(dfs(0, 1))
