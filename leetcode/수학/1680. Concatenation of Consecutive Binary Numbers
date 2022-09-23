@@ -1,0 +1,17 @@
+from collections import defaultdict 
+
+class Solution:
+    def concatenatedBinary(self, n: int) -> int:
+        
+        st = ['1']
+        dic = defaultdict(list)
+        dic[1] = ['1']
+        
+        for i in range(2, len(bin(n)[2:])+1):
+            for j in dic[i-1]:
+                dic[i].append(j+'0')
+                dic[i].append(j+'1')
+            st.extend(sorted(dic[i], key=lambda x:int(x)))
+        
+        return int('0b'+''.join(st[:n]), 2) %  (10 ** 9 + 7)
+        
