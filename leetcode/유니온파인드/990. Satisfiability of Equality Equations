@@ -1,0 +1,54 @@
+from collections import defaultdict
+
+class Solution:
+    def equationsPossible(self, equations: List[str]) -> bool:
+        
+        ans = True
+        arr1, arr2 = [], []
+        parent = [i - ord('a') for i in range(ord('a'), ord('z')+2)]
+        
+        def getParent(num):
+            
+            if parent[num] == num:
+                return num
+            
+            parent[num] = getParent(parent[num])
+            return parent[num]
+        
+        for equation in equations:
+            
+            eq = equation.split('==')
+            df = equation.split('!=')
+            
+            if len(eq)>=2:
+                arr1.append(eq)
+            else:
+                arr2.append(df)
+        
+        for eq in arr1:
+            a, b = map(lambda x: ord(x)- ord('a'), eq)
+            
+            if a == b:
+                continue
+            
+            if a > b:
+                a, b = b, a
+            
+            a, b = getParent(a), getParent(b)
+            parent[b] = a
+        
+        for df in arr2:
+            a, b = map(lambda x: ord(x)- ord('a'), df)
+            
+            if a > b:
+                a, b = b, a
+            
+            a, b = getParent(a), getParent(b)
+            
+            if a == b:
+                ans = False
+                break
+                
+        return ans
+                
+            
