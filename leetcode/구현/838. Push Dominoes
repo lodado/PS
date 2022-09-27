@@ -1,0 +1,40 @@
+class Solution:
+    def pushDominoes(self, dominoes: str) -> str:
+        
+        st = list(dominoes)
+        visited = [False if st[i]=='.' else True for i in range(len(st))]
+        
+        while True:
+            flag = True              
+            
+            for i in range(len(st)):        
+                now = st[i]
+                
+                if now == 'L' and i-1>=0:
+                    if not visited[i-1] and st[i-1] == "R":
+                        st[i-1] = 'X'
+                    
+                    if st[i-1] == '.':
+                        st[i-1] = 'L'
+                        flag = False  
+                        
+            for i in range(len(st)-1, -1, -1):
+                now = st[i]
+                
+                if now == 'R' and i+1<len(st):
+                    if not visited[i+1] and st[i+1] == "L":
+                        st[i+1] = 'X'
+                    
+                    if st[i+1] == '.':
+                        st[i+1] = 'R'
+                        flag = False
+        
+            if flag:
+                break
+            
+            for i in range(len(st)):
+                if st[i] != '.':
+                    visited[i] = True
+                
+        return ''.join([i if i!='X' else '.' for i in st])
+        
