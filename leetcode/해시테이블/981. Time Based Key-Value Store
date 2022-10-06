@@ -1,0 +1,40 @@
+from collections import defaultdict
+
+class TimeMap:
+
+    def __init__(self):
+        self.dic = defaultdict(list)
+        
+    def binarySearch(self, key, value):
+        
+        left, right = 0, len(self.dic[key])-1
+        
+        while left<=right:    
+            mid = (left + right) // 2
+        
+            if self.dic[key][mid][1]<value:
+                left = mid+1
+            else:
+                right = mid-1
+        
+        return left
+        
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        self.dic[key].insert(self.binarySearch(key, timestamp), [value, timestamp])
+
+    def get(self, key: str, timestamp: int) -> str:
+        
+        index = self.binarySearch(key, timestamp)        
+        
+        if not self.dic[key]:
+            return ''
+        
+        if len(self.dic[key])<=index:
+            return self.dic[key][-1][0]
+        
+        if self.dic[key][index][1]<=timestamp:
+            return self.dic[key][index][0]
+        elif index-1>=0:
+            return self.dic[key][index-1][0]
+            
+        return ''
