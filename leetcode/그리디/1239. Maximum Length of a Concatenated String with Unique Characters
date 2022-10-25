@@ -1,0 +1,19 @@
+from itertools import combinations
+
+class Solution:
+    def maxLength(self, arr: List[str]) -> int:           
+        self.ans = 0
+        st = [""]
+        
+        for word in arr:
+            for j in st:
+                newWord = word + j 
+                
+                if len(newWord) != len(set(newWord)):
+                    continue
+                
+                st.append(newWord)
+                self.ans = max(self.ans, len(newWord))
+                
+        return self.ans
+        
