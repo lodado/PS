@@ -1,0 +1,21 @@
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        
+        if k == 0:
+            return True
+        
+        sums = 0
+        dic = {0:-1}
+        
+        for i in range(len(nums)):
+            if k!=0:
+                sums = (sums + nums[i]) % k
+
+            if sums not in dic:
+                dic[sums] = i
+            else:
+                if i - dic[sums] > 1:
+                    return True
+                    
+        return False
+        
