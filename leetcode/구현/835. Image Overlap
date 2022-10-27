@@ -1,0 +1,23 @@
+from collections import defaultdict
+
+class Solution:
+    def largestOverlap(self, img1: List[List[int]], img2: List[List[int]]) -> int:
+        ans = 0
+        dic = defaultdict(int)
+        row, col = len(img1[0]), len(img1)
+        arr1, arr2 = [], []
+        
+        for y in range(col):
+            for x in range(row):
+                if img1[y][x]:
+                    arr1.append((x, y))
+                if img2[y][x]:
+                    arr2.append((x, y))
+        
+        for x1, y1 in arr1:
+            for x2, y2 in arr2:
+                locate = (x1-x2, y1-y2)
+                dic[locate]+=1
+                ans = max(dic[locate], ans)
+                
+        return ans
