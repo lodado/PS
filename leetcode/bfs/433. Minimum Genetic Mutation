@@ -1,0 +1,23 @@
+from collections import deque
+
+class Solution:
+    def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+        dic = set()
+        deq = deque([[start, 0]])
+        
+        def checkDiffCount(word1, word2):
+            return sum([0 if i==j else 1 for i, j in zip(word1, word2)])
+            
+        while deq:
+            now, length = deq.popleft()
+            
+            if now == end:
+                return length
+            
+            for i in bank:
+                
+                if checkDiffCount(now, i) == 1 and i not in dic:
+                    dic.add(i)
+                    deq.append([i, length+1])
+        
+        return -1
