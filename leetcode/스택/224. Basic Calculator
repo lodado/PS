@@ -1,0 +1,49 @@
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+const calculate = function(s) {
+    let string = s.replaceAll(' ', '');
+    let container = [];
+        
+    for(let i of string){
+        if(!isNaN(i) && !isNaN(container.at(-1))){
+        container[container.length-1] += i;
+        }else{
+            container.push(i);
+        }
+    }
+    
+    let [num, sign] = [0, 1];
+    let st = [0];
+    
+    for(let now of container){
+        let length = st.length;
+        
+        switch(now){
+            case '+':
+                st[length-1] += num * sign;
+                [sign, num] = [1, 0]
+                break;
+            case '-':
+                st[length-1] += num * sign;
+                [sign, num] = [-1, 0]
+                break;
+            case '(':
+                st.push(sign);
+                st.push(0);
+                [sign, num] = [1, 0]
+                break
+            case ')':
+                let cache = (st.pop() + num * sign) * st.pop(); 
+                st[st.length-1]+=cache;
+                [sign, num] = [1, 0]
+                break
+            default:
+                num = Number(now);
+        }
+    }
+    
+    return st.at(-1) + num * sign;
+};
