@@ -1,0 +1,13 @@
+from collections import defaultdict, Counter
+
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        dic = defaultdict(int)
+        
+        for v in Counter(arr).values():
+            if dic[v]>=1:
+                return False
+            
+            dic[v]+=1
+            
+        return True
