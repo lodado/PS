@@ -1,0 +1,14 @@
+from collections import Counter
+
+class Solution:
+    def halvesAreAlike(self, s: str) -> bool:
+        cnt1 = Counter(s[:len(s)//2])
+        cnt2 = Counter(s[len(s)//2:])
+        sum1, sum2 = 0, 0
+        
+        for i in 'aeiouAEIOU':
+            sum1 += cnt1[i]
+            sum2 += cnt2[i]
+        
+        return sum1 == sum2
+        
