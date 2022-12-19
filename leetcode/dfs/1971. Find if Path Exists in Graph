@@ -1,0 +1,20 @@
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        visited = [False for i in range(n+1)]
+        ed = [[] for i in range(n)]
+        st = [source]
+
+        for start, end in edges:
+            ed[start].append(end)
+            ed[end].append(start)
+
+        while st:
+            cursor = st.pop()
+            visited[cursor] = True
+
+            for nxt in ed[cursor]:
+                if not visited[nxt]:
+                    visited[nxt] = True
+                    st.append(nxt)
+
+        return visited[destination]
