@@ -1,0 +1,18 @@
+class Solution:
+    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
+        count = len(rooms)
+        visited = [False for i in range(len(rooms)+1)]
+        st = [0]
+
+        while st:
+            now = st.pop() 
+            visited[now] = True
+            count-=1 
+
+            for nxt in rooms[now]:
+                
+                if not visited[nxt]:
+                    visited[nxt] = True
+                    st.append(nxt)
+
+        return count == 0 
