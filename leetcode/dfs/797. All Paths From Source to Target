@@ -1,0 +1,27 @@
+import copy
+
+class Solution:
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        n = len(graph)
+        ans = []
+        visited = [False for i in range(n)]
+        
+        def dfs(now, path=[]):
+            
+            if now == n-1:
+                ans.append(copy.deepcopy(path))
+                return 
+            
+            visited[now]= True
+
+            for i in graph[now]:
+                if not visited[i]:
+                    visited[i] = True
+                    path.append(i)
+                    dfs(i, path)
+                    visited[i] = False
+                    path.pop()
+
+        dfs(0, [0])
+        return ans
+        
