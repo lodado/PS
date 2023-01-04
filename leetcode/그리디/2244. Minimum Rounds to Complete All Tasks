@@ -1,0 +1,14 @@
+from collections import Counter
+
+class Solution:
+    def minimumRounds(self, tasks: List[int]) -> int:
+        answer = 0
+        cnt = Counter(tasks)
+
+        for i in cnt.values():
+            if i == 1:
+                return -1
+
+            answer += ceil(i/3)
+
+        return answer
