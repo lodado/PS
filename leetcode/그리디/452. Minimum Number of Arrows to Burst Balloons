@@ -1,0 +1,12 @@
+from sys import maxsize 
+
+class Solution:
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+        answer, arrow = 0, -maxsize
+
+        for start, end in sorted(points, key=lambda x:x[1]):
+            if arrow < start:
+                answer += 1
+                arrow = end
+
+        return answer 
