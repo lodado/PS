@@ -1,0 +1,30 @@
+from collections import Counter
+
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        length = len(points)
+        arr = [[None for i in range(length)] for i in range(length)]
+        answer = 1
+
+        for p1 in range(length):
+            for p2 in range(p1+1, length):
+                
+                if p1 == p2:
+                    continue 
+                    
+                y1, x1 = points[p1]
+                y2, x2 = points[p2]
+                dy, dx = y2 - y1, x2 - x1
+
+                grad = dy/dx if dx != 0 else 'inf'
+                arr[p2][p1] = grad
+
+        for i in arr:
+            cnt = Counter(i)
+            del cnt[None]
+            
+            maxi = cnt.most_common()
+            if len(maxi)>0:
+                answer = max(answer, maxi[0][1] + 1)
+        return answer
+
