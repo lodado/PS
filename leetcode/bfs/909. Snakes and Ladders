@@ -1,0 +1,36 @@
+from sys import maxsize
+from collections import deque
+
+class Solution:
+    def snakesAndLadders(self, board: List[List[int]]) -> int:
+        global ans
+        
+        n = len(board)
+        visited = [maxsize for _ in range(n**2)]
+        visited[0] = 0
+
+        deq = deque()
+        deq.append(0)
+
+        board.reverse()  
+        for i in range(1, len(board), 2): board[i].reverse()
+        board = [None]+list(chain(*board))  
+
+        def getNext(i):
+            num = board[i+1]
+            return i if num == -1 else num-1
+
+        while deq:
+            now = deq.popleft()
+
+            if now == n**2 -1:
+                return visited[now]
+
+            for i in range(now+1, min(now+7, n**2)):
+                nxt = getNext(i)
+
+                if visited[nxt] > visited[now] + 1:
+                    visited[nxt] = visited[now] + 1
+                    deq.append(nxt)
+
+        return -1
