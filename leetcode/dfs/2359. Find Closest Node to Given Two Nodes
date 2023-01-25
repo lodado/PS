@@ -1,0 +1,30 @@
+from sys import maxsize
+
+class Solution:
+    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:        
+        def dfs(startPoint):
+            visited = [-1 for i in range(len(edges))]
+            cursor = startPoint
+            length = 0
+
+            while cursor != -1:
+                if cursor !=-1 and visited[cursor] == -1:
+                    visited[cursor] = length
+                    cursor = edges[cursor]
+                    length+=1
+                else:
+                    break
+
+            return visited
+
+        ans = -1
+        visited1, visited2 = dfs(node1), dfs(node2)  
+        min_dist = maxsize
+
+        for index in range(len(visited1)):
+            i, j = visited1[index], visited2[index]
+            if min(i, j)>-1 and max(i, j)<min_dist:
+                min_dist = max(i, j)
+                ans = index
+            
+        return ans 
