@@ -1,0 +1,23 @@
+/**
+ * @param {string} str1
+ * @param {string} str2
+ * @return {string}
+ */
+var gcdOfStrings = function(str1, str2) {
+    
+    for(let i=0; i<str2.length; i++){
+        for(let j=str2.length; j>i; j--){
+        
+            if(str1.length % (j-i) === 0){
+                str = str2.slice(i, j);
+
+                string1 = str1.replaceAll(str, '');
+                string2 = str2.replaceAll(str, '');
+                if(string1.length ===0 && string2.length ===0)
+                    return str;
+            }
+        }
+    }
+
+    return "";
+};
