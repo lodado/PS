@@ -1,0 +1,28 @@
+from collections import Counter
+
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        if len(p) > len(s):
+            return []
+
+        anagram = Counter(p)
+        word = Counter(s[:len(p)])
+        ans = []
+
+        def isAnagram():
+            for k, v in anagram.items():
+                if word[k] != v:
+                    return False
+            
+            return True
+        
+        for i in range(len(s)-len(p)+1):
+            if i>0:
+                word[s[i-1]]-=1
+                word[s[i+len(p)-1]]+=1
+
+            if isAnagram():
+                ans.append(i)
+
+        return ans
+        
