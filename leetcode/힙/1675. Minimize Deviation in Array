@@ -1,0 +1,26 @@
+import heapq
+from sys import maxsize
+
+class Solution:
+    def minimumDeviation(self, nums: List[int]) -> int:
+        ans = maxsize
+        hq = [-2 * i if i %2 == 1 else -i for i in nums]
+        heapq.heapify(hq)
+
+        mini = maxsize
+
+        for i in nums:
+            mini = min(mini, 2 * i if i % 2 == 1 else i)
+
+        while hq:
+            currentValue = heapq.heappop(hq)
+            ans = min(ans, -currentValue - mini)
+
+            if currentValue % 2 == 1:
+                break
+
+            currentValue = currentValue // 2
+            mini = min(mini, -currentValue)
+            heapq.heappush(hq, currentValue)
+
+        return ans 
