@@ -1,0 +1,47 @@
+from collections import defaultdict
+from sys import maxsize
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        
+        def mergeSort(left, right, mid):
+            l = left
+            m = mid+1
+
+            arr= [0 for i in range(right-left+1)]
+            index = 0
+
+            while(left<=mid and m<=right):
+                if nums[left]>nums[m]:
+                    arr[index] = nums[m]
+                    m+=1
+                else:
+                    arr[index] = nums[left]
+                    left+=1
+                
+                index+=1
+
+            while(left<=mid):
+                arr[index] = nums[left]
+                left+=1
+                index+=1
+
+            while(m<=right):
+                arr[index] = nums[m]
+                index+=1
+                m+=1
+
+            for i in range(l, right+1):
+                nums[i] = arr[i - l]
+
+        def merge(left, right):
+            if left<right:
+                mid = (left + right)//2
+                
+                merge(left, mid)
+                merge(mid+1, right)
+                mergeSort(left, right, mid)
+                
+        merge(0, len(nums)-1)
+
+        return nums
