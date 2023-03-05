@@ -1,0 +1,49 @@
+from sys import maxsize
+from collections import defaultdict, deque
+
+class Solution:
+    def minJumps(self, arr: List[int]) -> int:
+        length = len(arr)
+        
+        dp = [maxsize for i in range(length)]
+        dic = defaultdict(set)
+        deq = deque([(0, 0)]) # (count, index)
+        
+        def canMove(nextIndex):
+            if 0<=nextIndex<length:
+                return True
+            else:
+                return False
+
+        for i in range(len(arr)):
+            now = arr[i]
+            dic[now].add(i)
+
+        while deq:
+            count, index = deq.popleft()
+
+            if index == length-1:
+                dp[-1] = count
+                break
+
+            if count > dp[index]:
+                continue
+            
+            dp[index] = count
+            
+            if canMove(index+1) and dp[index+1]>count:
+                deq.append((count+1, index+1))
+                dp[index+1] = count + 1
+
+            if canMove(index-1) and dp[index-1]>count:
+                deq.append((count+1, index-1))
+                dp[index-1] = count + 1
+
+            for nextIndex in dic[arr[index]]:
+                if nextIndex != index:
+                    deq.append((count+1, nextIndex))
+                    dp[nextIndex] = count + 1
+
+            dic[arr[index]] = set()
+
+        return dp[-1]
