@@ -1,0 +1,35 @@
+from collections import defaultdict
+
+class Trie:
+
+    def __init__(self):
+        self.head = defaultdict(list)
+        self.dic = defaultdict(int)
+
+    def insert(self, word: str) -> None:
+        self.dic[word] +=1
+        cursor = self.head
+        
+        for i in word:
+            if i not in cursor:
+                cursor[i] = defaultdict(list)
+            cursor = cursor[i]
+
+    def startsWith(self, word: str) -> bool:
+        cursor = self.head
+
+        for i in word:
+            if i not in cursor:
+                return False
+            cursor = cursor[i]
+
+        return cursor is not None
+
+    def search(self, prefix: str) -> bool:
+        return self.dic[prefix] > 0
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.search(word)
+# param_3 = obj.startsWith(prefix)
