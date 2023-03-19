@@ -1,0 +1,41 @@
+class Trie:
+    def __init__(self, word = None):
+        self.children = dict()
+        self.isEnd = False
+
+class WordDictionary:
+
+    def __init__(self):
+        self.head = Trie()
+
+    def addWord(self, word: str) -> None:
+        cursor = self.head
+        
+        for i in word:
+            if i not in cursor.children:
+                cursor.children[i] = Trie(i)
+            cursor = cursor.children[i]
+        cursor.isEnd = True
+
+    def search(self, word: str) -> bool:
+
+        def dfs(cursor, length):
+            if(length == len(word)):
+                return cursor.isEnd
+            
+            children = cursor.children
+
+            if(word[length] == '.'):
+                for k in children.keys():
+                    if(dfs(children[k], length+1)):
+                        return True
+            
+            if word[length] in children:
+                return dfs(children[word[length]], length+1) 
+
+        return dfs(self.head, 0)
+
+# Your WordDictionary object will be instantiated and called as such:
+# obj = WordDictionary()
+# obj.addWord(word)
+# param_2 = obj.search(word)
