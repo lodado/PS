@@ -1,0 +1,28 @@
+class Solution:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
+        nodes = [i for i in range(n)]
+        redundantCables = 0
+        root = None
+
+        def findParent(index):
+            if nodes[index] == index:
+                return index
+
+            nodes[index] = findParent(nodes[index])
+            return nodes[index]
+
+        for a, b in connections:
+            if b < a:
+                b, a = a, b
+
+            a, b = findParent(a), findParent(b)
+
+            if a != b:
+                nodes[b] = a
+            else:
+                redundantCables += 1
+
+        components = sum(1 for i in range(n) if nodes[i] == i)
+        requiredCables = components - 1
+
+        return requiredCables if redundantCables >= requiredCables else -1
