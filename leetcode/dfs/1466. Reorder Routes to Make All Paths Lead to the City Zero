@@ -1,0 +1,31 @@
+class Solution:
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+        checked = [False for i in range(n)]
+        nodes = [[] for i in range(n)]
+        reverseNodes = [[] for i in range(n)]
+        st = [0]
+        cnt = 0 
+
+        for start, end in connections:
+            nodes[start].append(end)
+            reverseNodes[end].append(start)
+
+        while st:
+            now = st.pop()
+
+            if checked[now]:
+                continue
+
+            checked[now] = True
+
+            for i in nodes[now]:
+                if not checked[i]:
+                    cnt+=1
+                    st.append(i)
+
+            for i in reverseNodes[now]:
+                if not checked[i]:
+
+                    st.append(i)
+
+        return cnt
