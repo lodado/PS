@@ -1,0 +1,28 @@
+class Solution:
+    def longestCycle(self, edges: List[int]) -> int:
+        global answer
+        answer = 0
+        visited = [False for i in range(len(edges))]
+
+        def dfs(index, length, nodes=dict()):
+            global answer 
+            nextIndex = edges[index]
+            
+            if nextIndex in nodes:
+                val = nodes[nextIndex]
+                answer = max(answer, length - val + 1)
+                return
+
+            if nextIndex != -1 and not visited[nextIndex]:
+                visited[nextIndex] = True
+                nodes[index] = length
+                dfs(nextIndex, length+1, nodes)  
+                del nodes[index]        
+                visited[nextIndex] = False
+
+        for i in range(len(edges)):
+            if not visited[i]:
+                visited[i] = True
+                dfs(i, 0)
+
+        return answer if answer != 0 else -1
