@@ -1,0 +1,22 @@
+from sys import maxsize
+
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        if not grid:
+            return 0
+        
+        col, row = len(grid), len(grid[0])
+
+        dp = [[maxsize for j in range(row)] for i in range(col)]
+        dp[0][0] = grid[0][0]
+
+        for i in range(col):
+            for j in range(row):
+                
+                if i+1<col:
+                    dp[i+1][j] = min(dp[i+1][j], dp[i][j] + grid[i+1][j])
+
+                if j+1<row:
+                     dp[i][j+1] = min(dp[i][j+1], dp[i][j] + grid[i][j+1])
+
+        return dp[-1][-1]
