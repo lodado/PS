@@ -1,0 +1,16 @@
+class Solution:
+    def partitionString(self, s: str) -> int:
+        string = ''
+        answer = 0
+
+        for i in s:
+            if i in string:
+                string = i
+                answer+=1
+            else:
+                string += i 
+
+        if string != '':
+            answer+=1
+
+        return answer
