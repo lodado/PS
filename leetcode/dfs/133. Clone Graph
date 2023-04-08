@@ -1,0 +1,23 @@
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return None
+
+        visited = {}  
+
+        def dfs(node, cloneNode):
+            nonlocal visited  
+            val, neighbors = node.val, node.neighbors
+            visited[node] = cloneNode 
+
+            for neighbor in neighbors:
+                newNode = visited.get(neighbor, Node(neighbor.val, []))
+                cloneNode.neighbors.append(newNode)
+
+                if neighbor not in visited:
+                    dfs(neighbor, newNode)
+
+        head = Node(node.val, [])
+        dfs(node, head)
+
+        return head
