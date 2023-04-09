@@ -1,0 +1,51 @@
+from collections import defaultdict
+
+class Node:
+    def __init__(self, index, color):
+        self.index = index
+        self.color = color
+        self.edges = []
+        
+        self.dic= defaultdict(int)
+        self.indegree = 0
+
+    def appendEdge(self, edge):
+        self.edges.append(edge)
+
+class Solution:
+    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+        length = len(colors)
+        nodes = [Node(i, colors[i]) for i in range(length)]
+        count = 0
+        answer = 0
+
+        for start, end in edges:
+            nodes[start].appendEdge(nodes[end])
+            nodes[end].indegree +=1
+
+        q = deque([])
+
+        for node in nodes:
+            node.dic[node.color] +=1
+            if node.indegree == 0:
+                q.append(node)
+
+        while q:
+            node = q.pop()
+            dic = node.dic
+            count +=1
+
+            for nextNode in node.edges:
+                for k, v in dic.items():
+                    nextNode.dic[k] = max(nextNode.dic[k], v + (k == nextNode.color))
+                
+                nextNode.indegree-=1
+
+                if nextNode.indegree == 0:
+                    q.append(nextNode)
+
+        for node in nodes:
+            most_common = sorted(node.dic.values())[-1] if node.dic else 0
+            answer = max(answer, most_common)
+
+        return answer if count == length else -1
