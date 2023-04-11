@@ -1,0 +1,33 @@
+from sys import setrecursionlimit
+setrecursionlimit(10**9)
+
+def solution(n, lighthouse):
+    answer = 0
+    tree = [[] for _ in range(n+1)]
+    
+    for start, end in lighthouse:
+        tree[start].append(end)
+        tree[end].append(start)
+    
+    def dfs(now, before):
+        nonlocal answer
+
+        if (len(tree[now]) == 1 and before == tree[now][0]):
+            return 1
+        
+        cnt = 0
+        for i in tree[now]:
+            if i==before:
+                continue
+                
+            cnt += dfs(i, now)
+        
+        if cnt == 0:
+            return 1
+        
+        answer+=1
+        return 0
+    
+    dfs(1, 0)    
+    
+    return answer
