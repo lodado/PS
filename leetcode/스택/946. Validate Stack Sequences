@@ -1,0 +1,14 @@
+from collections import deque
+
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        deq = deque(popped)
+        st = []
+
+        for i in pushed:
+            st.append(i)
+            while st and deq and st[-1] == deq[0]:
+                deq.popleft()
+                st.pop()
+            
+        return True if not deq else False
