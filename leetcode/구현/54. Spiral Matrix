@@ -1,0 +1,30 @@
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        if not matrix:
+            return []
+        
+        answer = [matrix[0][0]]
+        delta = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        col, row = len(matrix), len(matrix[0])
+        visited = [[False for _ in range(row)] for _ in range(col)]
+        x, y = 0, 0
+        direction = 0
+        flag = False
+        visited[0][0] = True
+
+        while True:
+            nxtX, nxtY = x + delta[direction][0], y + delta[direction][1]
+
+            if not 0<=nxtX<row or not 0<=nxtY<col or visited[nxtY][nxtX]:
+                if flag:
+                    break
+                direction = (direction + 1) % 4
+                flag = True
+                continue
+            
+            flag = False
+            answer.append(matrix[nxtY][nxtX])
+            x, y = nxtX, nxtY
+            visited[y][x] = True
+
+        return answer   
