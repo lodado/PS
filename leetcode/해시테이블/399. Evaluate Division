@@ -1,0 +1,46 @@
+from collections import defaultdict
+
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        def add_to_dict(dictionary, key1, key2, value):
+            if key1 not in dictionary:
+                dictionary[key1] = {}
+            dictionary[key1][key2] = value
+
+        def update_dict(dictionary, new_dictionary):
+            for key, value_set in dictionary.items():
+                if new_dictionary.get(key):
+                    value_set.update(new_dictionary[key])
+
+        answer = []
+        equation_dict = {}
+
+        for (a, b), val in zip(equations, values):
+            add_to_dict(equation_dict, a, b, val)
+            add_to_dict(equation_dict, a, a, 1)
+            add_to_dict(equation_dict, b, a, 1/val)
+
+        change_occurred = True
+        
+        while change_occurred:
+            new_dict = {}
+            change_occurred = False 
+
+            for left_val, value_set in equation_dict.items():
+
+                for k, v in value_set.items():
+                    if equation_dict.get(k):
+                        for k2, v2 in equation_dict[k].items():
+                            if not equation_dict[left_val].get(k2):
+                                add_to_dict(new_dict, left_val, k2, v * v2)
+                                change_occurred = True
+
+            update_dict(equation_dict, new_dict)
+
+        for lval, rval in queries:
+            if equation_dict.get(lval) and equation_dict[lval].get(rval):
+                answer.append(equation_dict[lval][rval])
+            else:
+                answer.append(-1)
+
+        return answer
