@@ -1,0 +1,43 @@
+import heapq
+from sys import maxsize
+
+class Solution:
+    def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
+        answer = 0
+        li, ri = 0, len(costs)-1
+        left, right = [], []
+
+        while li< ri and len(left)<candidates:
+            heapq.heappush(left, [costs[li], li])
+            li+=1
+
+        while li<= ri and len(right)<candidates:
+            heapq.heappush(right, [costs[ri], ri])
+            ri-=1
+
+        while k>0:
+
+            if left and right:
+                leftCursor = left[0]
+                rightCursor = right[0]
+
+                isLeft = leftCursor[1] < rightCursor[1] if leftCursor[0] == rightCursor[0] else leftCursor[0] < rightCursor[0]
+                val = heapq.heappop(left if isLeft else right)
+            else:
+                val = heapq.heappop(left if left else right)      
+
+            if li>ri:
+                heapq.heappush(left, [maxsize, li])
+                heapq.heappush(right, [maxsize, ri])
+            elif isLeft:
+                heapq.heappush(left, [costs[li], li])
+                li+=1
+            else:
+                heapq.heappush(right, [costs[ri], ri])
+                ri-=1
+
+            answer += val[0]
+
+            k-=1
+
+        return answer
