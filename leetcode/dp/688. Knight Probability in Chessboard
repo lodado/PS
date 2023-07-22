@@ -1,0 +1,33 @@
+from collections import defaultdict
+
+class Solution:
+    def knightProbability(self, n: int, k: int, startX: int, startY: int) -> float:
+        nextStep = [(1, 2), (2,1), (2, -1), (1, -2), (-1, -2), (-2, -1), (-1, 2), (-2, 1)]
+        dic = defaultdict(int)
+        ans = 0
+
+        def isVaild(x, y):
+            return 0<=x<n and 0<=y<n
+
+        def dfs(x, y, cnt):
+            if not isVaild(x, y):
+                return 0
+
+            if cnt == 0:
+                return 1 
+            
+            if dic[x, y, cnt]>0:
+                return dic[x, y, cnt]
+
+            prob = 0
+
+            for nextX, nextY in nextStep:
+                newX = x + nextX
+                newY = y + nextY
+
+                prob += dfs(newX, newY, cnt-1)
+
+            dic[x, y, cnt] += prob / 8.0
+            return dic[x, y, cnt]
+
+        return dfs(startX, startY, k)
